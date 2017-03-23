@@ -1,5 +1,3 @@
-
-
 web=$1
 java=$2
 run=$3
@@ -41,5 +39,4 @@ then
 	#Start the server
         sudo systemctl restart apache2.service
 fi
-
 
