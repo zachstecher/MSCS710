@@ -5,7 +5,6 @@
  * This class holds all the methods to interact with
  * the program's SQLite database.
  */
-
 import java.sql.*;
 
 public class DBInterface {
