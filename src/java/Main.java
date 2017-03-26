@@ -5,8 +5,9 @@ public class Main {
     DBInterface dbi = new DBInterface();
     MetricsAggregator magr = new MetricsAggregator();
     Utils util = new Utils();
-    
+        
     dbi.createNewTable();
+    dbi.addData();
     dbi.selectAll();
     
   }

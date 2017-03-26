@@ -52,19 +52,36 @@ public class DBInterface {
       System.out.println(e.getMessage());
     }
   }
-  
+
+//TODO: Add batch update support with PreparedStatement objects
+//TODO: Abstract execution code and make a static method in the utilities class
+public void addData(){
+String url = "jdbc:sqlite:tests.db";
+String sql = "insert into volatile values (1, 63.1, 2400);";
+try (Connection conn = DriverManager.getConnection(url);
+        Statement stmt = conn.createStatement()){
+
+      stmt.execute(sql);
+      System.out.println("Table created successfully!");
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+
+}  
+
   public void selectAll(){
     String sql = "SELECT mem_module_num, total_memory, speed FROM volatile";
     
     try(Connection conn = this.connect();
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql)){
-      
+
       // loop through the result set
       while(rs.next()) {
-        System.out.println(rs.getInt("mem_module_num") + "\t" +
-                           rs.getFloat("total_memory") + "\t" +
-                           rs.getFloat("speed"));
+        System.out.println("Module Number : " + rs.getInt("mem_module_num") + "\n" + 
+                           "Total Memory  :" +rs.getFloat("total_memory")+ " GB" + "\n" +
+                           "Memory Clock  : "+rs.getFloat("speed") + " mhz");
       }
     }
     catch(SQLException e){
