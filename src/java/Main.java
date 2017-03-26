@@ -5,5 +5,8 @@ public class Main {
     MetricsAggregator magr = new MetricsAggregator();
     Utils util = new Utils();
     
+    dbi.createNewTable();
+    dbi.selectAll();
+    
   }
 }
