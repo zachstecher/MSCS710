@@ -10,10 +10,10 @@ public static FileReader fr = null;
 public static ArrayList<String> readFile(String path){
     ArrayList<String> lines = new ArrayList<>(); 
     try {
-	fr = new FileReader(FILENAME);
+	fr = new FileReader(path);
 	br = new BufferedReader(fr);
 	String sCurrentLine;
-	br = new BufferedReader(new FileReader(FILENAME));
+	br = new BufferedReader(new FileReader(path));
 	while ((sCurrentLine = br.readLine()) != null) {
 	    lines.add(sCurrentLine);
         }
