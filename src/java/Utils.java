@@ -32,4 +32,51 @@ public static ArrayList<String> readFile(String path){
 } 
 return lines;
 } 
+
+
+public static ArrayList<String> execShell(String command){
+  ArrayList<String> lines = new ArrayList<>();
+        String s = null;
+        try {
+            Process p = Runtime.getRuntime().exec(command);
+            BufferedReader stdInput = new BufferedReader(new 
+                 InputStreamReader(p.getInputStream()));
+            BufferedReader stdError = new BufferedReader(new 
+                 InputStreamReader(p.getErrorStream()));
+            while ((s = stdInput.readLine()) != null) {
+               lines.add(s);
+            }
+            while ((s = stdError.readLine()) != null) {
+                //std error
+                System.out.println(s);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    return lines;
+    }
+
+public static String getValue(String line, String key, String valuePatter){
+        Pattern pKey = Pattern.compile(key);
+        String result = "";
+        Matcher match = pKey.matcher(line);
+        while(match.find()){
+         result = match.group();
+        }
+        
+        if(result != ""){
+            Pattern pValue = Pattern.compile(valuePatter);
+            Matcher matcher = pValue.matcher(line);
+            String value = "";
+            while(matcher.find()){
+            value = matcher.group();
+            }
+            return value;
+        }else{
+            return null;
+        }
+        
+    }
 }
