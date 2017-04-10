@@ -30,7 +30,7 @@ public class DBInterface {
    * it exists, and creates a new empty table with the
    * values passed to it.
    * 
-   * (Currently has hardcoded values for testing purposes).
+   * (Currently has hard coded values for testing purposes).
    */
   public static void createNewTable(){
     //SQLite connection string
