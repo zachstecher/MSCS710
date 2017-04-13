@@ -9,6 +9,10 @@ public class MetricsAggregator1 {
   MetricsAggregator1(){
     System.out.println("MetricsAggregator");
   }
+  public static void main(String[] args){
+MetricsAggregator1 m = new MetricsAggregator1();
+System.out.println(m.getStaticCPUMetrics());
+}
   
   public HashMap getStaticCPUMetrics(){
     HashMap metrics = new HashMap();
@@ -36,16 +40,18 @@ public class MetricsAggregator1 {
     }
 
     for(String line : tempInfo){
-     Pattern p = Pattern.compile("[0-9]+.[0-9]");
-     Matcher matcher = p.matcher(line);
-     String value = "";
-     while(matcher.find()){
-       value = matcher.group();
-     }
-     System.out.println(value);
-     maxTemp.add(value);
-     maxTemp.add(value);
-    }
+     boolean usableLine = line.contains("Core");
+     if(usableLine){
+       Pattern p = Pattern.compile("[0-9]+.[0-9]");
+       Matcher matcher = p.matcher(line);
+       String value = "";
+       while(matcher.find()){
+         value = matcher.group();
+       }
+       maxTemp.add(value);
+       maxTemp.add(value);
+      }
+  }
 
 
    metrics.put("cpu_number", cpuNumber);
