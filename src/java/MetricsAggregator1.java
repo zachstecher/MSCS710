@@ -59,4 +59,34 @@ System.out.println(m.getStaticCPUMetrics());
    metrics.put("max_temp",maxTemp);
    return metrics;
   }
-}
+
+
+
+
+  public HashMap getCPUInterrupts(){
+	Hashmap metrics = new HashMap();
+        /*Metrics for:
+		* Function call interrupts; key: CAL:
+                * Rescheduling Interrupts;  key: RES:
+        */
+
+
+      ArrayList<String> data = Utils.readFile("/proc/interrupts");
+      ArrayList<String> cpuNumber = new ArrayList<>();
+      ArrayList<String> rescheduleInterrupts = new ArrayList<>();
+      ArrayList<String> functionCallInterrupts = new ArrayList<>();
+      ArrayList<String> frequency = new ArrayList<>();
+      ArrayList<String> timestamp = new ArrayList();
+      
+      for(String line: data){
+        String result = "";
+        if(line.contains("RES:"){
+
+        }else if(line.contains("CAL:"){
+
+        }
+      }     
+
+
+   }
+ }
