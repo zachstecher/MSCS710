@@ -11,8 +11,10 @@ import java.text.SimpleDateFormat;
 
 
 public class MetricsAggregator {
-  MetricsAggregator(){
-    System.out.println("MetricsAggregator");
+  
+  public static void main(String[] args) {
+    MetricsAggregator m = new MetricsAggregator();
+    m.getRAMMetrics();
   }
   
   /*
@@ -24,43 +26,9 @@ public class MetricsAggregator {
    *  execShell, and getValue methods
    * Parameters: None
    */
-  public HashMap getStaticCPUMetrics(){
-    HashMap metrics = new HashMap();
-    ArrayList<String> data = Utils.readFile("/proc/cpuinfo");
-    ArrayList<String> cpuNumber = new ArrayList<>();
-    ArrayList<String> maxClockRate = new ArrayList<>();
-    ArrayList<String> max_Temp = new ArrayList<>();
-    ArrayList<String> tempInfo = Utils.execShell("sensors");
-    ArrayList<String>[] lists = {cpuNumber, maxClockRate};
-    for(String line : data){
-    String result = "";
-    String[] keys = {"processor", "model name"};
-    String[] patterns = {"[0-9]+","[0-9]+.[0-9]"};
-       for (int i = 0; i < keys.length; i++){
-       String result_sub  = Utils.getValue(line, keys[i], patterns[i]);
-       if(result_sub != null){
-          lists[i].add(result_sub);
-       }
-      }
-    }
-
-    for(String line : tempInfo){
-     Pattern p = Pattern.compile("[0-9]+.[0-9]");
-     Matcher matcher = p.matcher(line);
-     String value = "";
-     while(matcher.find()){
-       value = matcher.group();
-     }
-     System.out.println(value);
-     max_Temp.add(value);
-     max_Temp.add(value);
-    }
-
-
-   metrics.put("cpu_number", cpuNumber);
-   metrics.put("max_clock_rate", maxClockRate);
-   metrics.put("max_temp", max_Temp);
-  }
+ 
+ //PLACEHOLDER
+ 
   
   /*
    * This method gets the disk statistics from the appropriate
@@ -69,15 +37,40 @@ public class MetricsAggregator {
    * Parameters: None
    */
   
-  public HashMap getStorageMetrics() {
-    HashMap storageMetrics = new HashMap();
+  public HashMap getRAMMetrics() {
+    HashMap ramMetrics = new HashMap();
     String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
-    ArrayList<String> data = Utils.readFile("/proc/diskstats");
-    ArrayList<String> diskNumber = new ArrayList<>();
+    ArrayList<String> data = Utils.readFile("/proc/meminfo");
     ArrayList<String> totalSize = new ArrayList<>();
     ArrayList<String> spaceAvail = new ArrayList<>();
-    //ArrayList<String> timeStamp = timestamp;
-    ArrayList<String>[] lists = {diskNumber, spaceAvail, totalSize};
+    ArrayList<String> swapSize = new ArrayList<>();
+    ArrayList<String> swapAvail = new ArrayList<>();
+    ArrayList<String>[] lists = new ArrayList[4];
+    lists[0] = totalSize;
+    lists[1] = spaceAvail;
+    lists[2] = swapSize;
+    lists[3] = swapAvail;
+    
+    for(String line : data){
+    String result = "";
+    String[] keys = {"MemAvail", "MemTotal", "SwapTotal", "SwapFree"};
+    String[] patterns = {"[0-9]+","[0-9]+.[0-9]", "[0-9]+.[0-9]", "[0-9]+.[0-9]"};
+      for (int i = 0; i < keys.length; i++){
+        String result_sub  = Utils.getValue(line, keys[i], patterns[i]);
+        if(result_sub != null){
+          lists[i].add(result_sub);
+        }
+      }
+    }
+    
+    
+    ramMetrics.put("Total Memory", totalSize);
+    ramMetrics.put("Available Memory", spaceAvail);
+    ramMetrics.put("Total Swap", swapSize);
+    ramMetrics.put("Swap Available", swapAvail);
+    ramMetrics.put("Timestamp", timestamp);
+    
+    System.out.println(ramMetrics);
+    return ramMetrics;
   }
 }
-
