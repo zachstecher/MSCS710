@@ -16,6 +16,11 @@ System.out.println(m.getStaticCPUMetrics());
         //Does a for loop run in a length zero array in java?
 System.out.println("+++++++++++++++++++++++++++");
 System.out.println(m.getCPUInterrupts());
+System.out.println("+++++++++++++++++++++++++++");
+System.out.println(m.getCPUTimePerformance());
+System.out.println("+++++++++++++++++++++++++++");
+System.out.println(m.getNetworkMetrics());
+
 }
   
   public HashMap getStaticCPUMetrics(){
@@ -80,34 +85,107 @@ System.out.println(m.getCPUInterrupts());
       ArrayList<String> interruptType = new ArrayList();
       ArrayList<String> interruptCount = new ArrayList();
       ArrayList<String> timestamp = new ArrayList();
-      Date date = new Date();
-      String dateTime = date.toString();
       for(String line: data){
-        String result = "";
         ArrayList<String> resInterrupts_sub = Utils.getValues(line, "RES:", "[0-9]+");
            for(int index = 0; index < resInterrupts_sub.size(); index++){
                 cpuNumber.add(index+"");
                 interruptType.add("Rescheduling Interrupt");
                 interruptCount.add(resInterrupts_sub.get(index));
-                timestamp.add(dateTime);     
+                timestamp.add(new Date().toString());     
            }
-        ArrayList<String> funcInterrupts_sub = Utils.getValues(line, "CAL:", "[0-9]+");
+        }
+      for(String line: data){
+         ArrayList<String> funcInterrupts_sub = Utils.getValues(line, "CAL:", "[0-9]+");
            for(int index = 0; index < funcInterrupts_sub.size(); index++){
                 cpuNumber.add(index+"");
                 interruptType.add("Function Call Interrupt");
                 interruptCount.add(funcInterrupts_sub.get(index));
-                timestamp.add(dateTime);
+                timestamp.add(new Date().toString());
 
-	   }
+           }
 
-        }
+      }
       metrics.put("cpu_number", cpuNumber);
       metrics.put("interrupt_type", interruptType);
       metrics.put("interrupt_count",interruptCount);
-      metrics.put("date_time", dateTime);
+      metrics.put("date_time", timestamp);
       return metrics;
       }     
 
 
+  public HashMap getCPUTimePerformance(){
+    HashMap metrics = new HashMap();
+    ArrayList<String> data = Utils.readFile("/proc/cpuinfo");
+    ArrayList<String> cpuNumber = new ArrayList<>();
+    ArrayList<String> clockRate = new ArrayList<>();
+    ArrayList<String> curTemp = new ArrayList<>();
+    ArrayList<String> dateTimes = new ArrayList<>();
+    ArrayList<String> tempInfo = Utils.execShell("sensors");
+    ArrayList<String>[] lists = new ArrayList[2];
+    lists[0] = cpuNumber;
+    lists[1] = clockRate;
+         for(String line : data){
+    String result = "";
+    String[] keys = {"processor", "cpu MHz"};
+    String[] patterns = {"[0-9]+","[0-9]+.[0-9]"};
+       for (int i = 0; i < keys.length; i++){
+       String result_sub  = Utils.getValue(line, keys[i], patterns[i]);
+       if(result_sub != null){
+          if(i == 0){
+             dateTimes.add(new Date().toString());
+          }
+          lists[i].add(result_sub);
+       }
+      }
+    }
+
+    for(String line : tempInfo){
+     boolean usableLine = line.contains("Core");
+     if(usableLine){
+       Pattern p = Pattern.compile("[0-9]+.[0-9]");
+       Matcher matcher = p.matcher(line);
+       String value = "";
+       matcher.find();
+       value = matcher.group();
+       curTemp.add(value);
+       curTemp.add(value);
+      }
+    }
+
+  metrics.put("cpu_number", cpuNumber);
+  metrics.put("current_clock_rate", clockRate);
+  metrics.put("current_temp", curTemp);
+  metrics.put("date_time", dateTimes);
+  return metrics;
+  }
+ 
+
+  public HashMap getNetworkMetrics(){
+   ArrayList<String> data = Utils.execShell("sudo netstat -nlp");
+   HashMap metrics = new HashMap();
+   ArrayList<String> localIP = new ArrayList();
+   ArrayList<String> foreignIP = new ArrayList();
+   ArrayList<String> pid = new ArrayList();
+   ArrayList<String> programName = new ArrayList();
+   ArrayList<String> dateTimes = new ArrayList();
+   String r1 = "[0-9:]+\\.[0-9:]+\\.[0-9:]+\\.[0-9:]+:[0-9*]+";
+   String r2 = "[:]+[0-9:]+[0-9:]+[0-9:*]+";
+   for (String line: data){
+     ArrayList<String> lineResult = Utils.getValues(line, "\\b(?:udp|tcp6|tcp|udp6)\\b", "(?:"+r1+"|"+r2+"|[0-9]+/|[^/]+(?=/$|$))");
+     if(lineResult.size()>0){
+       localIP.add(lineResult.get(0));
+       foreignIP.add(lineResult.get(1));
+       pid.add(lineResult.get(2).substring(0,lineResult.get(2).length()-1 ));
+       programName.add(lineResult.get(3).replace(" ", ""));
+       dateTimes.add(new Date().toString());
+     } 
+  }
+  metrics.put("local_ip", localIP);
+  metrics.put("foreign_ip",foreignIP);
+  metrics.put("pid", pid);
+  metrics.put("program_name", programName);
+  metrics.put("date_time", dateTimes);
+  return metrics;
+  }
  }
 
