@@ -69,14 +69,7 @@ public static FileReader fr = null;
   } 
   
   public static String getValue(String line, String key, String valuePatter){
-    Pattern pKey = Pattern.compile(key);
-    String result = "";
-    Matcher match = pKey.matcher(line);
-    while(match.find()){
-      result = match.group();
-    }
-        
-    if(result != ""){
+    if(pExists(line, key)){
       Pattern pValue = Pattern.compile(valuePatter);
       Matcher matcher = pValue.matcher(line);
       String value = "";
@@ -89,17 +82,18 @@ public static FileReader fr = null;
     }     
   }
 
-
-
-    public static ArrayList<String>  getValues(String line, String key, String valuePatter){
-    Pattern pKey = Pattern.compile(key);
+   private static boolean pExists(String line, String key){
+     Pattern pKey = Pattern.compile(key);
     String result = "";
     Matcher match = pKey.matcher(line);
     while(match.find()){
       result = match.group();
     }
+   return (result != "");
+   }
 
-    if(result != ""){
+    public static ArrayList<String>  getValues(String line, String key, String valuePatter){
+    if(pExists(line, key)){
       Pattern pValue = Pattern.compile(valuePatter);
       Matcher matcher = pValue.matcher(line);
       ArrayList<String> value = new ArrayList();
