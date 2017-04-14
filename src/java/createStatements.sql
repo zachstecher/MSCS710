@@ -1,38 +1,36 @@
-CREATE TABLE Volatile(
- mem_module_num int NOT NULL
- total_memory decimal(18,0)
- speed        float
- PRIMARY KEY(mem_module_num)
-)
+
 
 
 CREATE TABLE volatile_mem_time_stats(
- mem_module_num int NOT NULL
  mem_available  decimal(18,0)
- mem_used   decimal(18,0)
+ mem_total   decimal(18,0)
  swap_used decimal(18,0)
+ swap_available decimal(18,0)
  timestamp datetime
  FOREIGN KEY (mem_module_num) REFERENCES Volatile(mem_module_num)       
 )
 
 
 CREATE TABLE persistent_storage(
- disk_num int
- total_size decimal(18,0)
- PRIMARY KEY(disk_num)
+ disk_name VARCHAR(64)
+ total_size int
+ PRIMARY KEY(disk_name)
 )
 
 CREATE TABLE persistent_storage_stats(
- disk_num int 
- space_available decimal
+ disk_name VARCHAR(64)
+ space_available decimal(18,0)
+ used_percent int
  timestamp datetime
  FOREIGN KEY (disk_num) REFERENCES persistent_storage(disk_num)
 )
 
 CREATE TABLE networking(
  pid int
- open_port int
- user_space decimal(18,0)
+ local_ip varchar(64)
+ foreign_ip varchar(64)
+ program_name varchar(128)
+ timestamp datetime 
 )
 
 CREATE TABLE cpu_interrupts(
