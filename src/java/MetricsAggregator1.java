@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Date;
 
 public class MetricsAggregator1 {
   
@@ -12,6 +13,9 @@ public class MetricsAggregator1 {
   public static void main(String[] args){
 MetricsAggregator1 m = new MetricsAggregator1();
 System.out.println(m.getStaticCPUMetrics());
+        //Does a for loop run in a length zero array in java?
+System.out.println("+++++++++++++++++++++++++++");
+System.out.println(m.getCPUInterrupts());
 }
   
   public HashMap getStaticCPUMetrics(){
@@ -64,7 +68,7 @@ System.out.println(m.getStaticCPUMetrics());
 
 
   public HashMap getCPUInterrupts(){
-	Hashmap metrics = new HashMap();
+	HashMap metrics = new HashMap();
         /*Metrics for:
 		* Function call interrupts; key: CAL:
                 * Rescheduling Interrupts;  key: RES:
@@ -73,20 +77,37 @@ System.out.println(m.getStaticCPUMetrics());
 
       ArrayList<String> data = Utils.readFile("/proc/interrupts");
       ArrayList<String> cpuNumber = new ArrayList<>();
-      ArrayList<String> rescheduleInterrupts = new ArrayList<>();
-      ArrayList<String> functionCallInterrupts = new ArrayList<>();
-      ArrayList<String> frequency = new ArrayList<>();
+      ArrayList<String> interruptType = new ArrayList();
+      ArrayList<String> interruptCount = new ArrayList();
       ArrayList<String> timestamp = new ArrayList();
-      
+      Date date = new Date();
+      String dateTime = date.toString();
       for(String line: data){
         String result = "";
-        if(line.contains("RES:"){
+        ArrayList<String> resInterrupts_sub = Utils.getValues(line, "RES:", "[0-9]+");
+           for(int index = 0; index < resInterrupts_sub.size(); index++){
+                cpuNumber.add(index+"");
+                interruptType.add("Rescheduling Interrupt");
+                interruptCount.add(resInterrupts_sub.get(index));
+                timestamp.add(dateTime);     
+           }
+        ArrayList<String> funcInterrupts_sub = Utils.getValues(line, "CAL:", "[0-9]+");
+           for(int index = 0; index < funcInterrupts_sub.size(); index++){
+                cpuNumber.add(index+"");
+                interruptType.add("Function Call Interrupt");
+                interruptCount.add(funcInterrupts_sub.get(index));
+                timestamp.add(dateTime);
 
-        }else if(line.contains("CAL:"){
+	   }
 
         }
+      metrics.put("cpu_number", cpuNumber);
+      metrics.put("interrupt_type", interruptType);
+      metrics.put("interrupt_count",interruptCount);
+      metrics.put("date_time", dateTime);
+      return metrics;
       }     
 
 
-   }
  }
+

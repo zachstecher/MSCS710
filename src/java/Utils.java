@@ -88,4 +88,26 @@ public static FileReader fr = null;
       return null;
     }     
   }
-}
+
+
+
+    public static ArrayList<String>  getValues(String line, String key, String valuePatter){
+    Pattern pKey = Pattern.compile(key);
+    String result = "";
+    Matcher match = pKey.matcher(line);
+    while(match.find()){
+      result = match.group();
+    }
+
+    if(result != ""){
+      Pattern pValue = Pattern.compile(valuePatter);
+      Matcher matcher = pValue.matcher(line);
+      ArrayList<String> value = new ArrayList();
+      while(matcher.find()){
+        value.add(matcher.group());
+      }
+      return value;
+    } else {
+      return new ArrayList<>();
+    }
+  }}
