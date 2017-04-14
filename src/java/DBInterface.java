@@ -39,11 +39,11 @@ public class DBInterface {
      * All of the SQLite Create Table statements
      */
     String createVolatile = "CREATE TABLE IF NOT EXISTS volatile_mem_stats (\n"
-        + "timestamp integer PRIMARY KEY, \n"
         + "mem_total integer NOT NULL, \n"
         + "mem_available integer NOT NULL, \n"
         + "swap_size integer NOT NULL, \n"
-        + "swap_available integer NOT NULL\n"
+        + "swap_available integer NOT NULL, \n"
+        + "timestamp integer NOT NULL\n"
         + ");";
     
     String createPersistent = "CREATE TABLE IF NOT EXISTS persistent_storage (\n"
@@ -64,7 +64,7 @@ public class DBInterface {
         + "local_ip text NOT NULL, \n"
         + "foreign_ip text NOT NULL, \n"
         + "program_name text NOT NULL, \n"
-        + "timestamp date_time text NOT NULL \n"
+        + "timestamp text NOT NULL \n"
         + ");";
     
     String createCPUInfo = "CREATE TABLE IF NOT EXISTS cpu_info (\n"
@@ -77,7 +77,7 @@ public class DBInterface {
         + "cpu_number integer PRIMARY KEY, \n"
         + "interrupt_type text NOT NULL, \n"
         + "interrupt_count text NOT NULL, \n"
-        + "timestamp date_time NOT NULL, \n"
+        + "timestamp text NOT NULL, \n"
         + "FOREIGN KEY(cpu_number) REFERENCES cpu_info(cpu_number)\n"
         + ");";
     
@@ -85,7 +85,7 @@ public class DBInterface {
         + "cpu_number integer PRIMARY KEY, \n"
         + "cpu_temp float NOT NULL, \n"
         + "clock_speed float NOT NULL, \n"
-        + "timestamp date_time NOT NULL, \n"
+        + "timestamp text NOT NULL, \n"
         + "FOREIGN KEY(cpu_number) REFERENCES cpu_info(cpu_number)\n"
         + ");";
     
@@ -100,6 +100,7 @@ public class DBInterface {
       stmt.execute(createCPUInterrupts);
       stmt.execute(createCPUTimePerformance);
       
+      System.out.println("Tables created successfully.");
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
@@ -107,19 +108,20 @@ public class DBInterface {
 
 //TODO: Add batch update support with PreparedStatement objects
 //TODO: Abstract execution code and make a static method in the utilities class
-public void addData(){
-String url = "jdbc:sqlite:linuxmetrics.db";
-String sql = "insert into volatile_mem_stats values (1, 63, 2400, 40, 100);";
-try (Connection conn = DriverManager.getConnection(url);
-        Statement stmt = conn.createStatement()){
-
-      stmt.execute(sql);
-      System.out.println("Table created successfully!");
-    }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-
-  }  
+  public void addData(){
+    String url = "jdbc:sqlite:linux_metrics.db";
+    
+    String insertVolatile = "INSERT INTO volatile_mem_stats(mem_total, mem_available, swap_size, swap_available, timestamp) VALUES(?,?,?,?,?)";
+    String insertPersistent = "INSERT INTO persistent_storage(disk_name, total_size) VALUES(?,?)";
+    String insertPersistentStorage = "INSERT INTO persistent_storage_stats(disk_name, used, available, used_percent) VALUES(?,?,?,?)";
+    String insertNetworking = "INSERT INTO networking_stats(pid, local_ip, foreign_ip, program_name, timestamp) VALUES(?,?,?,?,?)";
+    String insertCPUInfo = "INSERT INTO cpu_info(cpu_number, max_clock_rate, max_temp) VALUES(?,?,?)";
+    String insertCPUInterrupts = "INSERT INTO cpu_interrupts(cpu_number, interrupt_type, interrupt_count, timestamp) VALUES(?,?,?,?)";
+    String insertCPUPerformance = "INSERT INTO cpu_time_performance(cpu_number, cpu_temp, clock_speed, timestamp) VALUES(?,?,?,?)";
+    
+    
+    
+    
+  }
 }
 
