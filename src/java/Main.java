@@ -3,11 +3,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class Main {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException{
     DBInterface dbi = new DBInterface();
-    Utils util = new Utils();
-    
     dbi.createNewDatabase();
+    Thread.sleep(100);
+    MetricsAggregator ma = new MetricsAggregator(1000);
+    ma.repeatingEntries();
     
   }
 }

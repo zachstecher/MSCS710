@@ -5,9 +5,7 @@ import java.util.regex.Matcher;
 import java.util.Date;
 
 public class NetworkMetrics{
-  public NetworkMetrics(){
 
-  }
   public HashMap getNetworkMetrics(){
    ArrayList<String> data = Utils.execShell("sudo netstat -nlp");
    HashMap metrics = new HashMap();

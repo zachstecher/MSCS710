@@ -5,9 +5,6 @@ import java.util.regex.Matcher;
 import java.util.Date;
 
 public class RAMMetrics {
-  public RAMMetrics() {
-    
-  }
   
   public HashMap getRAMMetrics() {
     HashMap ramMetrics = new HashMap();

@@ -9,9 +9,6 @@ public class CPUMetrics{
 
 
 
-  public CPUMetrics(){
-  
-  }
   public HashMap getStaticCPUMetrics(){
     HashMap metrics = new HashMap();
     ArrayList<String> data = Utils.readFile("/proc/cpuinfo");

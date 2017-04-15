@@ -6,9 +6,6 @@ import java.util.regex.Matcher;
 import java.util.Date;
 
 public class DiskMetrics {
-  public DiskMetrics() {
-    
-  }
   public HashMap getDiskMetrics(){
     ArrayList<String> data = Utils.execShell("df");
     HashMap diskMetrics = new HashMap();
