@@ -1,5 +1,4 @@
 <?php
-  if(isset($_GET["table"])){
    class MyDB extends SQLite3
    {
       function __construct()
@@ -11,12 +10,7 @@
    if(!$db){
       echo $db->lastErrorMsg();
    }
-   if(isset($_GET["where"])){
-    // Use underscores for the where
-         $sql = "SELECT * from " .$_GET["table"] . " where " . $_GET["where"];
-   }else{
-         $sql = "SELECT * from " .$_GET["table"];
-   }
+    $sql = "SELECT count(*) from (select distinct cpu_number from cpu_info) a ";
 
    $ret = $db->query($sql);
    while($row = $ret->fetchArray(SQLITE3_ASSOC) ){
@@ -25,11 +19,7 @@
        echo $col . ",";
        };
       /*Last element plus newline*/
-      echo array_values(array_slice($row, -1))[0] . "\n";
+      echo array_values(array_slice($row, -1))[0] . "|";
    }
    $db->close();
-}
 ?>
-
-
-

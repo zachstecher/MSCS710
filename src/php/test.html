@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>My website</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+ </head>
+  <body>
+		<div id= "images"></div>
+                <div class = "ct-chart"></div>
+<script>
+
+ getCol = function (matrix, col){
+       var column = [];
+       for(var i=0; i<matrix.length; i++){
+          column.push(matrix[i][col]);
+       }
+       return column;
+ }
+
+
+displayCPUChart = function(id, col){
+ $.ajax({
+   type: 'get',
+   url: 'getData.php',
+   data: 'table=cpu_time_performance&where=cpu_number='+id,
+      success: function(data) {
+       var allData = CSVToArray(data, "," );
+       new Chartist.Line('.ct-chart', {
+  labels: getCol(allData, col),
+    series: [
+     getCol(allData,1)
+     ]
+      }, {
+        fullWidth: true,
+        height: "400px",
+        chartPadding: {
+        bottom:100,
+         }
+       });
+    }
+      
+  });
+}
+
+
+
+initCPUS = function(){
+  $.ajax({
+    type: 'get',
+    url: 'numCpus.php',
+    data: 'table=cpu_info',
+  	  success: function(data) {
+        lines = data.split("|");
+        for(i =0; i<parseInt(lines[0]); i++){
+             $('#images')
+               .prepend("<img id='cpu_"+i+"' src='cpu.jpg' width='160px' height='128px'/>");
+
+             $('#cpu_'+i)
+               .click(function(){ displayCPUChart(this.id.split("_")[1], 3);});
+
+            
+        }
+    }
+});
+}
+
+initHDS = function(){
+  $.ajax({
+    type: 'get',
+    url: 'numHDs.php',
+    data: 'table=cpu_info',
+          success: function(data) {
+        lines = CSVToArray(data, ",");
+        console.log(lines);
+        for(i=0; i<(lines.length-1); i++){
+         console.log(i);
+             $('#images')
+               .prepend("<img id='hd_"+lines[i][0]+"' src='hd.png' width='160px' height='128px'/>");
+
+             $('#hd_'+lines[i][0])
+               .click(function(){ console.log(this.id);});
+          }
+        }
+    
+});
+}
+
+//UNDER CONSTRUCTION
+initRAM = function(){
+  $.ajax({
+    type: 'get',
+    url: 'numHDs.php',
+    data: 'table=cpu_info',
+          success: function(data) {
+        lines = CSVToArray(data, ",");
+        console.log(lines);
+        for(i=0; i<(lines.length-1); i++){
+         console.log(i);
+             $('#images')
+               .prepend("<img id='hd_"+lines[i][0]+"' src='hd.png' width='160px' height='128px'/>");
+
+             $('#hd_'+lines[i][0])
+               .click(function(){ console.log(this.id);});
+          }
+        }
+    
+});
+}
+
+
+
+initCPUS();
+initHDS();
+
+
+
+
+    function CSVToArray( strData, strDelimiter ){
+        strDelimiter = (strDelimiter || ",");
+        var objPattern = new RegExp(
+            (
+                "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+                "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+                "([^\"\\" + strDelimiter + "\\r\\n]*))"
+            ),
+            "gi"
+            );
+        var arrData = [[]];
+        var arrMatches = null;
+        while (arrMatches = objPattern.exec( strData )){
+            var strMatchedDelimiter = arrMatches[ 1 ];
+            if (
+                strMatchedDelimiter.length &&
+                strMatchedDelimiter !== strDelimiter
+                ){
+                arrData.push( [] );
+            }
+            var strMatchedValue;
+            if (arrMatches[ 2 ]){
+                strMatchedValue = arrMatches[ 2 ].replace(
+                    new RegExp( "\"\"", "g" ),
+                    "\""
+                    );
+            } else {
+                strMatchedValue = arrMatches[ 3 ];
+            }
+            arrData[ arrData.length - 1 ].push( strMatchedValue );
+        }
+        return( arrData );
+    }
+
+</script>
+ 
+ </body>
+</html>

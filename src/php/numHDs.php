@@ -1,5 +1,4 @@
 <?php
-  if(isset($_GET["table"])){
    class MyDB extends SQLite3
    {
       function __construct()
@@ -11,25 +10,16 @@
    if(!$db){
       echo $db->lastErrorMsg();
    }
-   if(isset($_GET["where"])){
-    // Use underscores for the where
-         $sql = "SELECT * from " .$_GET["table"] . " where " . $_GET["where"];
-   }else{
-         $sql = "SELECT * from " .$_GET["table"];
-   }
+    $sql = "SELECT * from (select distinct disk_name from persistent_storage) a ";
 
    $ret = $db->query($sql);
    while($row = $ret->fetchArray(SQLITE3_ASSOC) ){
        /*Everything except the last element */
        foreach(array_slice($row, 0, -1) as $col){
-       echo $col . ",";
+       echo str_replace("/","_",$col) . ",";
        };
       /*Last element plus newline*/
-      echo array_values(array_slice($row, -1))[0] . "\n";
+      echo str_replace("/","_",array_values(array_slice($row, -1))[0]) . "\n";
    }
    $db->close();
-}
 ?>
-
-
-
