@@ -26,6 +26,10 @@ public class TestSuite {
    */
   
   public static void RAMTest() {
+    
+    System.out.println("\n*******************************************");
+    System.out.println("Beginning RAMMetrics Test.");
+    System.out.println("*******************************************\n");
     RAMMetrics rmiTest = new RAMMetrics();
     try {
       HashMap<String, ArrayList> test = rmiTest.getRAMMetrics();
@@ -37,9 +41,16 @@ public class TestSuite {
       System.out.println("RAMMetrics Initialization failed.");
       System.out.println(e);
     }
+    System.out.println("\n*******************************************");
+    System.out.println("Ending RAMMetrics Test.");
+    System.out.println("*******************************************\n");
   }
   
   public static void diskTest() {
+  
+    System.out.println("\n*******************************************");
+    System.out.println("Beginning diskMetrics Test.");
+    System.out.println("*******************************************\n");
     DiskMetrics diskTest = new DiskMetrics();
     try {
       HashMap<String, ArrayList> test = diskTest.getDiskMetrics();
@@ -51,6 +62,9 @@ public class TestSuite {
       System.out.println("DiskMetrics Initialization failed.");
       System.out.println(e);
     }
+    System.out.println("\n*******************************************");
+    System.out.println("Ending diskMetrics Test.");
+    System.out.println("*******************************************\n");
   }
   
   public static void CPUTest() {
