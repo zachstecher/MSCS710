@@ -16,6 +16,7 @@
 <script>
 
  getCol = function (matrix, col){
+alert("getCol function is called")
        var column = [];
        for(var i=0; i<matrix.length; i++){
           column.push(matrix[i][col]);
@@ -24,6 +25,7 @@
  }
 
 displayRamMetrics = function(){
+alert("displayRamMetrics function is called")
  $.ajax({
    type: 'get',
    url: 'getData.php',
@@ -52,6 +54,7 @@ displayRamMetrics = function(){
 }
 
 function arrayToTable(tableData) {
+alert("arrayToTable function is called")
     var table = $('<table></table>');
     $(tableData).each(function (i, rowData) {
         var row = $('<tr></tr>');
@@ -66,6 +69,7 @@ function arrayToTable(tableData) {
 
 
 displayNetworkMetrics = function(){
+alert("displayNetworkMetrics funtion is called")
  $.ajax({
    type: 'get',
    url: 'numNetworkConns.php',
@@ -96,6 +100,7 @@ displayNetworkMetrics = function(){
 
 
 displayCPUChart = function(id, col){
+alert("displayCPUChart function is called")
 console.log("displayCpuChart")
  $.ajax({
    type: 'get',
@@ -124,6 +129,7 @@ console.log("displayCpuChart")
 }
 
 displayHDChart = function(id, col){
+alert("displayHDChart function is called")
  $.ajax({
    type: 'get',
    url: 'getData.php',
@@ -154,6 +160,7 @@ displayHDChart = function(id, col){
 
 
 initCPUS = function(){
+alert("initCPUS function is called")
   $.ajax({
     type: 'get',
     url: 'numCpus.php',
@@ -174,6 +181,7 @@ initCPUS = function(){
 }
 
 initHDS = function(){
+alert("initHDS function is called")
   $.ajax({
     type: 'get',
     url: 'numHDs.php',
@@ -202,6 +210,7 @@ initHDS();
 
 
     function CSVToArray( strData, strDelimiter ){
+alert("CSVToArray function is called")
         strDelimiter = (strDelimiter || ",");
         var objPattern = new RegExp(
             (
