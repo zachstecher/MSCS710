@@ -10,6 +10,7 @@
 		<div id= "images"></div>
                 <img src= "ram.png" onclick="displayRamMetrics()"></img>
                 <img src ="net.png" width ='96px' height='112px' onclick="displayNetworkMetrics()"></img>
+                <h3 id ="chart_title">Linux Metrics</h3>
                 <div class = "ct-chart"></div>
                 <div class = "tables"></div>
 <script>
@@ -31,6 +32,7 @@ displayRamMetrics = function(){
       success: function(data) {
        var allData = CSVToArray(data, "," );
        jQuery('.tables').html('');
+       $("h3").text("Available RAM");
        $(".tables").append(arrayToTable(allData));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, 4),
@@ -72,6 +74,7 @@ displayNetworkMetrics = function(){
       success: function(data) {
        var allData = CSVToArray(data, "," );
        jQuery('.tables').html('');
+        $("h3").text("Number of connections");
        $(".tables").append(arrayToTable(allData));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, 1),
@@ -101,6 +104,7 @@ displayCPUChart = function(id, col){
       success: function(data) {
        var allData = CSVToArray(data, "," );
        jQuery('.tables').html('');
+       $("h3").text("CPU Clock Rate (CPU Thread " +id +")");
        $(".tables").append(arrayToTable(allData));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, col),
@@ -127,6 +131,8 @@ displayHDChart = function(id, col){
       success: function(data) {
        var allData = CSVToArray(data, "," );
        jQuery('.tables').html('');
+       $("h3").text("Available Space (Disk Partition " + id.replace("-","/").replace("-","/").substring(3,id.length) + ")");
+
        $(".tables").append(arrayToTable(allData));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, col),
