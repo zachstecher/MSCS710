@@ -7,7 +7,9 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class TestSuite {
+public static int errors = 0;
   public static void main(String[] args) throws InterruptedException{
+   System.out.println("+++++++ JAVA BACKEND TESTING +++++++++");
     TestSuite test1 = new TestSuite();
     test1.RAMTest();
     test1.diskTest();
@@ -15,7 +17,7 @@ public class TestSuite {
     test1.CPUInterruptsTest();
     test1.CPUPerformanceTest();
     test1.DBTest();
-    test1.MetricsAggregatorTest();
+    //test1.MetricsAggregatorTest();
   }
   
   
@@ -40,6 +42,7 @@ public class TestSuite {
     } catch (IllegalArgumentException e) {
       System.out.println("RAMMetrics Initialization failed.");
       System.out.println(e);
+      TestSuite.errors++;
     }
     System.out.println("\n*******************************************");
     System.out.println("Ending RAMMetrics Test.");
@@ -61,6 +64,7 @@ public class TestSuite {
     } catch (IllegalArgumentException e) {
       System.out.println("DiskMetrics Initialization failed.");
       System.out.println(e);
+      TestSuite.errors++;
     }
     System.out.println("\n*******************************************");
     System.out.println("Ending diskMetrics Test.");
@@ -78,6 +82,7 @@ public class TestSuite {
     } catch (IllegalArgumentException e) {
       System.out.println("StaticCPUMetrics Initialization failed.");
       System.out.println(e);
+      TestSuite.errors++;
     }
   }
   
@@ -92,6 +97,7 @@ public class TestSuite {
     } catch (IllegalArgumentException e) {
       System.out.println("CPUInterrupts Initialization failed.");
       System.out.println(e);
+      TestSuite.errors++;
     }
   }
   
@@ -106,6 +112,7 @@ public class TestSuite {
     } catch (IllegalArgumentException e) {
       System.out.println("CPUTimePerformance Initialization failed.");
       System.out.println(e);
+      TestSuite.errors++;
     }
   }
   
@@ -120,6 +127,7 @@ public class TestSuite {
     } catch (IllegalArgumentException e) {
       System.out.println("NetworkMetrics Initialization failed.");
       System.out.println(e);
+      TestSuite.errors++;
     }
   }
   
@@ -155,72 +163,89 @@ public class TestSuite {
       System.out.println("Volatile Metrics added to table.");
       test = cpuTest.getStaticCPUMetrics();
     } catch(NullPointerException e) {
-      System.out.println("You're putting the wrong metrics in this table.");
+      System.out.println("You're putting the wrong metrics in TestSuite table.");
+      TestSuite.errors++;
     } catch(IndexOutOfBoundsException e) {
       System.out.println("Volatile Entry Failed! Table Entry Missing A Value.");
       System.out.println("");
+      TestSuite.errors++;
+    }
+    
+    try {
+      dbi.executeSQL("DELETE FROM cpu_info;");
+      dbi.addStaticCPUMetrics(test1);
+      System.out.println("StaticCPU Metrics added to table.");
+    } catch(NullPointerException e) {
+      System.out.println("You're putting the wrong metrics in TestSuite table.");
+      TestSuite.errors++;
+    } catch(IndexOutOfBoundsException e) {
+      System.out.println("StaticCPU Entry Failed! Table Entry Missing A Value.");
+      System.out.println("");
+      TestSuite.errors++;
     }
     
     try {
       dbi.executeSQL("DELETE FROM persistent_storage;");
-      dbi.addStaticCPUMetrics(test1);
-      System.out.println("StaticCPU Metrics added to table.");
-    } catch(NullPointerException e) {
-      System.out.println("You're putting the wrong metrics in this table.");
-    } catch(IndexOutOfBoundsException e) {
-      System.out.println("StaticCPU Entry Failed! Table Entry Missing A Value.");
-      System.out.println("");
-    }
-    
-    try {
       dbi.addPersistentStorage(test2);
       System.out.println("PersistentStorage Metrics added to table.");
     } catch(NullPointerException e) {
-      System.out.println("You're putting the wrong metrics in this table.");
+      System.out.println("You're putting the wrong metrics in TestSuite table.");
+      TestSuite.errors++;
     } catch(IndexOutOfBoundsException e) {
       System.out.println("PersistentStorage Entry Failed! Table Entry Missing A Value.");
       System.out.println("");
+      TestSuite.errors++;
     }
     
     try {
       dbi.addCPUInterrupts(test3);
       System.out.println("CPUInterrupts Metrics added to table.");
     } catch(NullPointerException e) {
-      System.out.println("You're putting the wrong metrics in this table.");
+      System.out.println("You're putting the wrong metrics in TestSuite table.");
+      TestSuite.errors++;
     } catch(IndexOutOfBoundsException e) {
       System.out.println("CPUInterrupts Entry Failed! Table Entry Missing A Value.");
       System.out.println("");
+      TestSuite.errors++;
     }
     
     try {
       dbi.addCPUTimePerformance(test4);
       System.out.println("CPUTime Metrics added to table.");
     } catch(NullPointerException e) {
-      System.out.println("You're putting the wrong metrics in this table.");
+      System.out.println("You're putting the wrong metrics in TestSuite table.");
+      TestSuite.errors++;
     } catch(IndexOutOfBoundsException e) {
       System.out.println("CPUTime Entry Failed! Table Entry Missing A Value.");
       System.out.println("");
+      TestSuite.errors++;
     }
     
     try {
       dbi.addNetworkData(test5);
       System.out.println("Network Metrics added to table.");
     } catch(NullPointerException e) {
-      System.out.println("You're putting the wrong metrics in this table.");
+      System.out.println("You're putting the wrong metrics in TestSuite table.");
+      TestSuite.errors++;
     } catch(IndexOutOfBoundsException e) {
       System.out.println("Network Entry Failed! Table Entry Missing A Value.");
       System.out.println("");
+      TestSuite.errors++;
     }
     
     try {
       dbi.addPersistentStorageStats(test6);
       System.out.println("PersistentStorageStats Metrics added to table.");
     } catch(NullPointerException e) {
-      System.out.println("You're putting the wrong metrics in this table.");
+      System.out.println("You're putting the wrong metrics in TestSuite table.");
+      TestSuite.errors++;
     } catch(IndexOutOfBoundsException e) {
       System.out.println("PersistentStorageStats Entry Failed! Table Entry Missing A Value.");
-      System.out.println("");
+      TestSuite.errors++;
+      
     } 
+    System.out.println("\nTotal Number of Java Errors : " + TestSuite.errors + "\n");
+    System.out.println("End of Java Testing");
   }
   
   
@@ -229,15 +254,4 @@ public class TestSuite {
    *  of recording frequency.
    */
    
-  public static void MetricsAggregatorTest() {
-    int testSleep = 5000;
-    for (int i = testSleep; i >= 0; i -= 500) {
-      MetricsAggregator ma = new MetricsAggregator(1000);
-      try {
-        ma.repeatingEntries();
-      } catch(InterruptedException e) {
-        System.out.println(e);
-      }
-    }
-  }
 }
