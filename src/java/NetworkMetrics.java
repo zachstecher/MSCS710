@@ -8,7 +8,7 @@ public class NetworkMetrics{
 
   public HashMap getNetworkMetrics(){
    ArrayList<String> data = Utils.execShell("sudo netstat -nlp");
-   HashMap metrics = new HashMap();
+   HashMap<String, ArrayList> metrics = new HashMap<String, ArrayList>();
    ArrayList<String> localIP = new ArrayList();
    ArrayList<String> foreignIP = new ArrayList();
    ArrayList<String> pid = new ArrayList();

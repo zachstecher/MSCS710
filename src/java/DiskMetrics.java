@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.Date;
 
 public class DiskMetrics {
-  public HashMap getDiskMetrics(){
+  public HashMap<String, ArrayList> getDiskMetrics(){
     ArrayList<String> data = Utils.execShell("df");
     HashMap diskMetrics = new HashMap();
     ArrayList<String> diskName = new ArrayList();
@@ -15,8 +15,6 @@ public class DiskMetrics {
     ArrayList<String> usedPercent = new ArrayList();
     ArrayList<String> dateTimes = new ArrayList();
     String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
-    String r1 = "[0-9:]+\\.[0-9:]+\\.[0-9:]+\\.[0-9:]+:[0-9*]+";
-    String r2 = "[:]+[0-9:]+[0-9:]+[0-9:*]+";
     for (String line: data){
       ArrayList<String> lineResult = Utils.getValues(line, "\\/dev.*?(?= )", " [0-9]+");
       if(lineResult.size()>0) {

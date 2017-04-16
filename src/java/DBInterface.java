@@ -15,8 +15,6 @@ public class DBInterface {
 
   public DBInterface(){
     this.db= "jdbc:sqlite:linux_metrics.db";
-    System.out.println("DBInterface");
-    
   }
   
   /*
@@ -37,7 +35,7 @@ public class DBInterface {
         System.out.println("A new database has been created.");
       }
     } catch (SQLException e) {
-      System.out.println(e.getMessage());
+      System.out.println(e);
     }
     
     /*
@@ -108,7 +106,7 @@ public class DBInterface {
     }
   }
 
-  private void executeSQL(String sql){
+  public void executeSQL(String sql){
   try (Connection conn = DriverManager.getConnection(this.db);
         Statement stmt = conn.createStatement()) {
       stmt.execute(sql);
