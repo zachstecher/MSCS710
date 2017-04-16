@@ -10,7 +10,7 @@ public class CPUMetrics{
 
 
   public HashMap getStaticCPUMetrics(){
-    HashMap metrics = new HashMap();
+    HashMap<String, ArrayList> metrics = new HashMap<String, ArrayList>();
     ArrayList<String> data = Utils.readFile("/proc/cpuinfo");
     ArrayList<String> cpuNumber = new ArrayList<>();
     ArrayList<String> maxClockRate = new ArrayList<>();
@@ -56,7 +56,7 @@ public class CPUMetrics{
 
 
 public HashMap getCPUInterrupts(){
-        HashMap metrics = new HashMap();
+        HashMap<String, ArrayList> metrics = new HashMap<String, ArrayList>();
         /*Metrics for:
                 * Function call interrupts; key: CAL:
                 * Rescheduling Interrupts;  key: RES:
@@ -97,7 +97,7 @@ public HashMap getCPUInterrupts(){
 
 
   public HashMap getCPUTimePerformance(){
-    HashMap metrics = new HashMap();
+    HashMap<String, ArrayList> metrics = new HashMap<String, ArrayList>();
     ArrayList<String> data = Utils.readFile("/proc/cpuinfo");
     ArrayList<String> cpuNumber = new ArrayList<>();
     ArrayList<String> clockRate = new ArrayList<>();

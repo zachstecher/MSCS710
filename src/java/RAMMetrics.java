@@ -7,7 +7,7 @@ import java.util.Date;
 public class RAMMetrics {
   
   public HashMap getRAMMetrics() {
-    HashMap ramMetrics = new HashMap();
+    HashMap<String, ArrayList> ramMetrics = new HashMap<String, ArrayList>();
     ArrayList<String> data = Utils.readFile("/proc/meminfo");
     ArrayList<String> totalSize = new ArrayList<>();
     ArrayList<String> spaceAvail = new ArrayList<>();
@@ -32,7 +32,6 @@ public class RAMMetrics {
       }
     }
     dateTimes.add(new Date().toString());
-    
     
     ramMetrics.put("total_memory", totalSize);
     ramMetrics.put("available_memory", spaceAvail);
