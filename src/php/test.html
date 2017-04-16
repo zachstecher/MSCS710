@@ -8,7 +8,10 @@
  </head>
   <body>
 		<div id= "images"></div>
+                <img src= "ram.png" onclick="displayRamMetrics()"></img>
+                <img src ="net.png" width ='96px' height='112px' onclick="displayNetworkMetrics()"></img>
                 <div class = "ct-chart"></div>
+                <div class = "tables"></div>
 <script>
 
  getCol = function (matrix, col){
@@ -20,6 +23,76 @@
  }
 
 
+displayRamMetrics = function(){
+ $.ajax({
+   type: 'get',
+   url: 'getData.php',
+   data: 'table=volatile_mem_stats',
+      success: function(data) {
+       var allData = CSVToArray(data, "," );
+       jQuery('.tables').html('');
+       $(".tables").append(arrayToTable(allData));
+       new Chartist.Line('.ct-chart', {
+  labels: getCol(allData, 4),
+    series: [
+     getCol(allData,1)
+     ]
+      }, {
+        fullWidth: true,
+        height: "400px",
+        chartPadding: {
+        bottom:100,
+        left:50,
+         }
+       });
+    }
+      
+  });
+}
+
+function arrayToTable(tableData) {
+    var table = $('<table></table>');
+    $(tableData).each(function (i, rowData) {
+        var row = $('<tr></tr>');
+        $(rowData).each(function (j, cellData) {
+            row.append($('<td>'+cellData+'</td>'));
+        });
+        table.append(row);
+    });
+    return table;
+}
+
+
+
+displayNetworkMetrics = function(){
+ $.ajax({
+   type: 'get',
+   url: 'numNetworkConns.php',
+   data: 'table=c',
+      success: function(data) {
+       var allData = CSVToArray(data, "," );
+       jQuery('.tables').html('');
+       $(".tables").append(arrayToTable(allData));
+       new Chartist.Line('.ct-chart', {
+  labels: getCol(allData, 1),
+    series: [
+     getCol(allData,0)
+     ]
+      }, {
+        fullWidth: true,
+        height: "400px",
+        chartPadding: {
+        bottom:100,
+         }
+       });
+    }
+      
+  });
+}
+
+
+
+
 displayCPUChart = function(id, col){
  $.ajax({
    type: 'get',
@@ -27,6 +100,34 @@ displayCPUChart = function(id, col){
    data: 'table=cpu_time_performance&where=cpu_number='+id,
       success: function(data) {
        var allData = CSVToArray(data, "," );
+       jQuery('.tables').html('');
+       $(".tables").append(arrayToTable(allData));
+       new Chartist.Line('.ct-chart', {
+  labels: getCol(allData, col),
+    series: [
+     getCol(allData,1)
+     ]
+      }, {
+        fullWidth: true,
+        height: "400px",
+        chartPadding: {
+        bottom:100,
+         }
+       });
+    }
+      
+  });
+}
+
+displayHDChart = function(id, col){
+ $.ajax({
+   type: 'get',
+   url: 'getData.php',
+   data: "table=persistent_storage_stats&where=disk_name='"+id.replace("-","/").replace("-","/").substring(3,id.length)+"'",
+      success: function(data) {
+       var allData = CSVToArray(data, "," );
+       jQuery('.tables').html('');
+       $(".tables").append(arrayToTable(allData));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, col),
     series: [
@@ -80,35 +181,12 @@ initHDS = function(){
                .prepend("<img id='hd_"+lines[i][0]+"' src='hd.png' width='160px' height='128px'/>");
 
              $('#hd_'+lines[i][0])
-               .click(function(){ console.log(this.id);});
+               .click(function(){ displayHDChart(this.id, 3);});
           }
         }
     
 });
 }
-
-//UNDER CONSTRUCTION
-initRAM = function(){
-  $.ajax({
-    type: 'get',
-    url: 'numHDs.php',
-    data: 'table=cpu_info',
-          success: function(data) {
-        lines = CSVToArray(data, ",");
-        console.log(lines);
-        for(i=0; i<(lines.length-1); i++){
-         console.log(i);
-             $('#images')
-               .prepend("<img id='hd_"+lines[i][0]+"' src='hd.png' width='160px' height='128px'/>");
-
-             $('#hd_'+lines[i][0])
-               .click(function(){ console.log(this.id);});
-          }
-        }
-    
-});
-}
-
 
 
 initCPUS();
