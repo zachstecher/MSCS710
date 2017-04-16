@@ -73,6 +73,9 @@ public static int errors = 0;
   
   public static void CPUTest() {
     CPUMetrics cpuStaticTest = new CPUMetrics();
+    System.out.println("\n*******************************************");
+    System.out.println("Beginning CPUMetrics Test.");
+    System.out.println("*******************************************\n");
     try {
       HashMap<String, ArrayList> test = cpuStaticTest.getStaticCPUMetrics();
       for(ArrayList item : test.values()) {
@@ -84,10 +87,16 @@ public static int errors = 0;
       System.out.println(e);
       TestSuite.errors++;
     }
+    System.out.println("\n*******************************************");
+    System.out.println("Ending CPUMetrics Test.");
+    System.out.println("*******************************************\n");
   }
   
   public static void CPUInterruptsTest() {
     CPUMetrics cpuIntTest = new CPUMetrics();
+    System.out.println("\n*******************************************");
+    System.out.println("Beginning CPUInterrupts Test.");
+    System.out.println("*******************************************\n");
     try {
       HashMap<String, ArrayList> test = cpuIntTest.getCPUInterrupts();
       for(ArrayList item : test.values()) {
@@ -99,9 +108,15 @@ public static int errors = 0;
       System.out.println(e);
       TestSuite.errors++;
     }
+    System.out.println("\n*******************************************");
+    System.out.println("Ending CPUInterrupts Test.");
+    System.out.println("*******************************************\n");
   }
   
   public static void CPUPerformanceTest() {
+    System.out.println("\n*******************************************");
+    System.out.println("Beginning CPUPerformance Test.");
+    System.out.println("*******************************************\n");
     CPUMetrics cpuPerfTest = new CPUMetrics();
     try {
       HashMap<String, ArrayList> test = cpuPerfTest.getCPUTimePerformance();
@@ -114,10 +129,16 @@ public static int errors = 0;
       System.out.println(e);
       TestSuite.errors++;
     }
+    System.out.println("\n*******************************************");
+    System.out.println("Ending CPUPerformance Test.");
+    System.out.println("*******************************************\n");
   }
   
   public static void networkTest() {
     NetworkMetrics netTest = new NetworkMetrics();
+    System.out.println("\n*******************************************");
+    System.out.println("Beginning NetworkMetrics Test.");
+    System.out.println("*******************************************\n");
     try {
       HashMap<String, ArrayList> test = netTest.getNetworkMetrics();
       for(ArrayList item : test.values()) {
@@ -129,6 +150,9 @@ public static int errors = 0;
       System.out.println(e);
       TestSuite.errors++;
     }
+    System.out.println("\n*******************************************");
+    System.out.println("Ending NetworkMetrics Test.");
+    System.out.println("*******************************************\n");
   }
   
   
@@ -141,6 +165,9 @@ public static int errors = 0;
    */
    
   public static void DBTest() {
+    System.out.println("\n*******************************************");
+    System.out.println("Beginning DBInterface Test.");
+    System.out.println("*******************************************\n");
     DBInterface dbi = new DBInterface();
     dbi.createNewDatabase();
     
@@ -243,7 +270,10 @@ public static int errors = 0;
       System.out.println("PersistentStorageStats Entry Failed! Table Entry Missing A Value.");
       TestSuite.errors++;
       
-    } 
+    }
+    System.out.println("\n*******************************************");
+    System.out.println("Ending DBInterface Test.");
+    System.out.println("*******************************************\n");
     System.out.println("\nTotal Number of Java Errors : " + TestSuite.errors + "\n");
     System.out.println("End of Java Testing");
   }
