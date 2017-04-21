@@ -10,10 +10,40 @@
 		<div id= "images"></div>
                 <img src= "ram.png" onclick="displayRamMetrics()"></img>
                 <img src ="net.png" width ='96px' height='112px' onclick="displayNetworkMetrics()"></img>
+ <form>
+<h2>Graph Options:</h2>
+<label><h4>Ram Options</h4></label>
+<select id="ram_options" >
+  <option value="Memory Available1">Memory Available</option>
+  <option value="Swap Available 3">Swap Available</option>
+</select>
+<label><h4>CPU Options</h4></label>
+</select>
+<select id="cpu_options" >
+  <option value="Clock Rate 1">Clock Rate</option>
+  <option value="Temperature 2">CPU Temperature</option>
+</select>
+<form>
+
+
                 <h3 align = 'center' id ="chart_title">Linux Metrics</h3>
                 <div class = "ct-chart"></div>
                 <div class = "tables"></div>
 <script>
+ramIndex = 1;
+cpuIndex = 1;
+cpuTitle = "Clock Rate";
+ramTitle = "Memory Available";
+document.getElementById("cpu_options").onchange = function() {
+   cpuIndex = parseInt(this.value.slice(-1));
+   cpuTitle = this.value.replace(" "+this.value.slice(-1), "");
+};
+
+document.getElementById("ram_options").onchange = function() {
+   ramIndex = parseInt(this.value.slice(-1));
+   ramTitle = this.value.replace(" "+this.value.slice(-1), "");
+};
+
 
  getCol = function (matrix, col){
        var column = [];
@@ -32,14 +62,14 @@ displayRamMetrics = function(){
       success: function(data) {
        var allData = CSVToArray(data, "," );
        jQuery('.tables').html('');
-       $("h3").text("Available RAM");
+       $("h3").text("Ram Metric: " + ramTitle);
        headers = ['total memory', 'memory available', 'swap size', 'swap available', 'date & time'];
        allData.splice(-4);
        $(".tables").append(arrayToTable(allData, headers));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, 4),
     series: [
-     getCol(allData,1)
+     getCol(allData,ramIndex)
      ]
       }, {
         fullWidth: true,
@@ -84,6 +114,7 @@ displayNetworkMetrics = function(){
        jQuery('.tables').html('');
         $("h3").text("Number of connections");
        headers = ['number of connections', 'date & time'];
+       allData.splice(-4);
        $(".tables").append(arrayToTable(allData, headers));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, 1),
@@ -114,7 +145,7 @@ if(id < numThreads){
        var allData = CSVToArray(data, "," );
        allData.splice(-4);
        id++;
-       rData.push(getCol(allData,1));
+       rData.push(getCol(allData,cpuIndex));
        return displayAllCPUs(id,rData, numThreads);
   }
 });
@@ -127,9 +158,9 @@ if(id < numThreads){
        var allData = CSVToArray(data, "," );
        allData.splice(-4);
        jQuery('.tables').html('');
-       $("h3").text("CPU Clock Rate (All Threads)");
+       $("h3").text("CPU "+cpuTitle+ " (All Threads)");
         new Chartist.Line('.ct-chart', {
-  labels: getCol(allData, 3),
+  labels: getCol(allData, cpuIndex),
     series:
      rData
       }, {
@@ -172,14 +203,14 @@ displayCPUChart = function(id, col){
       success: function(data) {
        var allData = CSVToArray(data, "," );
        jQuery('.tables').html('');
-       $("h3").text("CPU Clock Rate (CPU Thread " +id +")");
+       $("h3").text("CPU "+cpuTitle +" (CPU Thread " +id +")");
        headers = ['cpu number', 'current clock rate (mhz)', 'current temperature (c)','date & time'];
        allData.splice(-4);
        $(".tables").append(arrayToTable(allData, headers));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, col),
     series: [
-     getCol(allData,1)
+     getCol(allData,cpuIndex)
      ]
       }, {
         fullWidth: true,
