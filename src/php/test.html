@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
  </head>
   <body>
+                <h1>Test Suit</h1>
 		<div id= "images"></div>
                 <img src= "ram.png" onclick="displayRamMetrics()"></img>
                 <img src ="net.png" width ='96px' height='112px' onclick="displayNetworkMetrics()"></img>
@@ -14,7 +15,7 @@
                 <div class = "ct-chart"></div>
                 <div class = "tables"></div>
 <script>
-
+errors = 0
  getCol = function (matrix, col){
        var column = [];
        for(var i=0; i<matrix.length; i++){
@@ -160,7 +161,13 @@ initCPUS = function(){
     data: 'table=cpu_info',
   	  success: function(data) {
         lines = data.split("|");
+       if(parseInt(lines[0])!= 12){
+       alert("Not all cpus accounted for");
+       errors++;
+       }
+       
         for(i =0; i<parseInt(lines[0]); i++){
+        
              $('#images')
                .prepend("<img id='cpu_"+i+"' src='cpu.jpg' width='160px' height='128px'/>");
 
@@ -181,6 +188,11 @@ initHDS = function(){
           success: function(data) {
         lines = CSVToArray(data, ",");
         console.log(lines);
+        if((lines.length-1)!= 2){
+        alert("Not all hard drive partitions accounted for");
+        errors++;
+        }
+       
         for(i=0; i<(lines.length-1); i++){
          console.log(i);
              $('#images')
@@ -195,8 +207,38 @@ initHDS = function(){
 }
 
 
+
+
+window.onload = function(){
 initCPUS();
 initHDS();
+
+
+function testChart () {
+   setTimeout(function () {
+  $("h1").text("Test Suite, Errors Found " + errors); 
+   try {
+      displayCPUChart(i,3);
+   }
+   catch(err) {
+      errors++;
+   alert("Errors Displaying CPU Chart #" + i);
+   }
+   i++;                    
+   if (i < 12) {          
+     testChart();          
+     }                    
+   }, 1000)
+  }
+  testChart(); 
+}
+
+
+
+
+
+
+
 
 
 

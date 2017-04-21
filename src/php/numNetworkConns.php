@@ -19,7 +19,7 @@
        echo $col . ",";
        };
       /*Last element plus newline*/
-      echo array_values(array_slice($row, -1))[0];
+      echo array_values(array_slice($row, -1))[0] . "|";
    }
    $db->close();
 ?>
