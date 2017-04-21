@@ -10,7 +10,7 @@
 		<div id= "images"></div>
                 <img src= "ram.png" onclick="displayRamMetrics()"></img>
                 <img src ="net.png" width ='96px' height='112px' onclick="displayNetworkMetrics()"></img>
-                <h3 id ="chart_title">Linux Metrics</h3>
+                <h3 align = 'center' id ="chart_title">Linux Metrics</h3>
                 <div class = "ct-chart"></div>
                 <div class = "tables"></div>
 <script>
@@ -33,7 +33,9 @@ displayRamMetrics = function(){
        var allData = CSVToArray(data, "," );
        jQuery('.tables').html('');
        $("h3").text("Available RAM");
-       $(".tables").append(arrayToTable(allData));
+       headers = ['total memory', 'memory available', 'swap size', 'swap available', 'date & time'];
+       allData.splice(-4);
+       $(".tables").append(arrayToTable(allData, headers));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, 4),
     series: [
@@ -52,8 +54,13 @@ displayRamMetrics = function(){
   });
 }
 
-function arrayToTable(tableData) {
-    var table = $('<table></table>');
+function arrayToTable(tableData, headers) {
+    var table = $('<table align="center" border="1"></table>');
+    var headerRow = $('<tr></tr>');
+    for(i=0; i<headers.length; i++){
+    headerRow.append('<th>' +headers[i] + '</th>');
+    }
+    table.append(headerRow);
     $(tableData).each(function (i, rowData) {
         var row = $('<tr></tr>');
         $(rowData).each(function (j, cellData) {
@@ -73,9 +80,11 @@ displayNetworkMetrics = function(){
    data: 'table=c',
       success: function(data) {
        var allData = CSVToArray(data, "," );
+       console.log(allData);
        jQuery('.tables').html('');
         $("h3").text("Number of connections");
-       $(".tables").append(arrayToTable(allData));
+       headers = ['number of connections', 'date & time'];
+       $(".tables").append(arrayToTable(allData, headers));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, 1),
     series: [
@@ -95,6 +104,65 @@ displayNetworkMetrics = function(){
 
 
 
+displayAllCPUs = function(id, rData, numThreads){
+if(id < numThreads){
+ $.ajax({
+   type: 'get',
+   url: 'getData.php',
+   data: 'table=cpu_time_performance&where=cpu_number='+id,
+      success: function(data) {
+       var allData = CSVToArray(data, "," );
+       allData.splice(-4);
+       id++;
+       rData.push(getCol(allData,1));
+       return displayAllCPUs(id,rData, numThreads);
+  }
+});
+}else if(id == numThreads){
+   $.ajax({
+   type: 'get',
+   url: 'getData.php',
+   data: 'table=cpu_time_performance&where=cpu_number='+id,
+      success: function(data) {
+       var allData = CSVToArray(data, "," );
+       allData.splice(-4);
+       jQuery('.tables').html('');
+       $("h3").text("CPU Clock Rate (All Threads)");
+        new Chartist.Line('.ct-chart', {
+  labels: getCol(allData, 3),
+    series:
+     rData
+      }, {
+        fullWidth: true,
+        height: "400px",
+        chartPadding: {
+        bottom:100,
+         },
+       });
+   }
+
+});
+id++;
+return displayAllCPUs(id, [], numThreads);
+}else{
+ $.ajax({
+   type: 'get',
+   url: 'getData.php',
+   data: 'table=cpu_time_performance',
+      success: function(data) {
+       var allData = CSVToArray(data, "," );
+       allData.splice(-4);
+       jQuery('.tables').html('');
+       headers = ['cpu number', 'current clock rate (mhz)', 'current temperature (c)','date & time'];
+       $(".tables").append(arrayToTable(allData, headers));
+
+  }
+});
+
+}
+
+}
+
 
 displayCPUChart = function(id, col){
  $.ajax({
@@ -105,7 +173,9 @@ displayCPUChart = function(id, col){
        var allData = CSVToArray(data, "," );
        jQuery('.tables').html('');
        $("h3").text("CPU Clock Rate (CPU Thread " +id +")");
-       $(".tables").append(arrayToTable(allData));
+       headers = ['cpu number', 'current clock rate (mhz)', 'current temperature (c)','date & time'];
+       allData.splice(-4);
+       $(".tables").append(arrayToTable(allData, headers));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, col),
     series: [
@@ -130,10 +200,11 @@ displayHDChart = function(id, col){
    data: "table=persistent_storage_stats&where=disk_name='"+id.replace("-","/").replace("-","/").substring(3,id.length)+"'",
       success: function(data) {
        var allData = CSVToArray(data, "," );
+       allData.splice(-4);
        jQuery('.tables').html('');
        $("h3").text("Available Space (Disk Partition " + id.replace("-","/").replace("-","/").substring(3,id.length) + ")");
-
-       $(".tables").append(arrayToTable(allData));
+       headers = ['partition name','space used', 'space available', 'date & time'];
+       $(".tables").append(arrayToTable(allData, headers));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, col),
     series: [
@@ -169,6 +240,10 @@ initCPUS = function(){
 
             
         }
+       $('#images').prepend("<img id='all_cpus' src='multi-core-cpu.jpg' width='160px' height='128px'/>");
+       numCPUs = parseInt(lines[0]);
+       console.log(numCPUs);
+       $('#all_cpus').click(function(){displayAllCPUs(0,[],numCPUs);});
     }
 });
 }
@@ -180,7 +255,6 @@ initHDS = function(){
     data: 'table=cpu_info',
           success: function(data) {
         lines = CSVToArray(data, ",");
-        console.log(lines);
         for(i=0; i<(lines.length-1); i++){
          console.log(i);
              $('#images')
