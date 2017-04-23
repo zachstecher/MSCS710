@@ -1,11 +1,9 @@
 #!/bin/bash
-web=$1
-java=$2
-run=$3
+arg=$1
 serverDir=/var/www/html/
 
 # --- Web application component --- #
-if [ $web == "build" ]
+if [ $arg == "configure" ]
  then
 	#Create the server
 	sudo apt-get install apache2
@@ -24,10 +22,10 @@ if [ $web == "build" ]
 fi;
 
 # --- Comile the code --- #
-if [ $java == "build" ]
+if [ $arg == "compile" ]
 then
 	printf "\n Compiling.....\n***************************"
-	rm src/java/*.db
+	rm ${serverDir}*.db
 	rm src/java/*.class
 	printf "\nCleared old class files and leftover database"
 	#Compile java
@@ -39,7 +37,7 @@ fi
 
 
 # --- Run the java program and launch the web server --- #
-if [ $run == "true" ]
+if [ $arg == "run" ]
 then
 	#Run the java program
 	printf "\n Running Java Program.....\n*************************\n"

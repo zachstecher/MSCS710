@@ -14,7 +14,7 @@ public class DBInterface {
  private String db;
 
   public DBInterface(){
-    this.db= "jdbc:sqlite:linux_metrics.db";
+    this.db= "jdbc:sqlite:/var/www/html/linux_metrics.db";
   }
   
   /*

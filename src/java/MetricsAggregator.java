@@ -27,7 +27,7 @@ public void repeatingEntries() throws InterruptedException {
    //For testing. Will eventually just run infinitely
 //   while(true){
      int count = 0;
-     while(count < 10){
+     while(count < 10000){
      //cpu metrics
      this.db.addCPUInterrupts(this.cpu.getCPUInterrupts());
      this.db.addCPUTimePerformance( this.cpu.getCPUTimePerformance());
