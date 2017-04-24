@@ -1,9 +1,9 @@
 /**
  * Class: DBInterface
- * @author Zach Stecher
+ * @authors Matthew Sokoloff, Zach Stecher, Rickin Adatia
  * 
- * This class holds all the methods to interact with
- * the program's SQLite database.
+ * This class holds all the methods to create and 
+ * interact with the program's SQLite database.
  */
 import java.sql.*;
 import java.util.HashMap;
@@ -22,6 +22,7 @@ public class DBInterface {
    * all relevant empty tables to have data inserted
    * at a later time.
    */
+   
   
   public void createNewDatabase() {
     
@@ -106,6 +107,10 @@ public class DBInterface {
     }
   }
 
+  /*
+   * Utility method that connects to the database and handles exceptions.
+   */
+  
   public void executeSQL(String sql){
   try (Connection conn = DriverManager.getConnection(this.db);
         Statement stmt = conn.createStatement()) {
@@ -115,51 +120,57 @@ public class DBInterface {
     }
  }
 
-  public void addStaticCPUMetrics(HashMap metrics){
-     String db = "jdbc:sqlite:linux_metrics.db";
-     ArrayList<String> cpu_num  = (ArrayList<String>) metrics.get("cpu_number");
-     ArrayList<String> max_clock_rate = (ArrayList<String>) metrics.get("max_clock_rate");
-     ArrayList<String> max_temp = (ArrayList<String>) metrics.get("max_temp");
-     for(int index = 0; index < cpu_num.size(); index++){
-     String insertCPUInfo = "INSERT INTO cpu_info values( "+
-                              cpu_num.get(index) +" , "+
-                              max_clock_rate.get(index) + " , "+
-                              max_temp.get(index) + ");";
-
-
-     executeSQL(insertCPUInfo);
-     }
-
+  /*
+   * All the methods to add gathered metrics to the existing database.
+   * The parameters are hash maps passed from the MetricsAggregator class.
+   */
+  
+  /*
+   * ========================================================================
+   * ADD METRICS METHODS START
+   * ========================================================================
+   */
+  
+  public void addStaticCPUMetrics(HashMap metrics) {
+    String db = "jdbc:sqlite:linux_metrics.db";
+    ArrayList<String> cpu_num  = (ArrayList<String>) metrics.get("cpu_number");
+    ArrayList<String> max_clock_rate = (ArrayList<String>) metrics.get("max_clock_rate");
+    ArrayList<String> max_temp = (ArrayList<String>) metrics.get("max_temp");
+    
+    for(int index = 0; index < cpu_num.size(); index++){
+      String insertCPUInfo = "INSERT INTO cpu_info values( "
+                             + cpu_num.get(index) + " , "
+                             + max_clock_rate.get(index) + " , "
+                             + max_temp.get(index) + ");";
+      executeSQL(insertCPUInfo);
+    }
   }
    
-
-   public void addCPUInterrupts(HashMap metrics){
+  public void addCPUInterrupts(HashMap metrics) {
    String db = "jdbc:sqlite:linux_metrics.db";
-    ArrayList<String> cpu_number = (ArrayList<String>) metrics.get("cpu_number");
-      ArrayList<String> interrupt_type = (ArrayList<String>) metrics.get("interrupt_type");
-      ArrayList<String> interrupt_count = (ArrayList<String>) metrics.get("interrupt_count");
-      ArrayList<String> date_time = (ArrayList<String>) metrics.get("date_time");
+   ArrayList<String> cpu_number = (ArrayList<String>) metrics.get("cpu_number");
+   ArrayList<String> interrupt_type = (ArrayList<String>) metrics.get("interrupt_type");
+   ArrayList<String> interrupt_count = (ArrayList<String>) metrics.get("interrupt_count");
+   ArrayList<String> date_time = (ArrayList<String>) metrics.get("date_time");
   
-      for(int index = 0; index < cpu_number.size(); index++){
-      String insertCPUInterrupts = "INSERT INTO cpu_interrupts values( "+ 
-                              cpu_number.get(index) +" , '"+ 
-                              interrupt_type.get(index) + "' , '"+
-                              interrupt_count.get(index) + "' , '"+
-                              date_time.get(index) + "');";
- 
-      executeSQL(insertCPUInterrupts);
-      }
-
+   for(int index = 0; index < cpu_number.size(); index++) {
+     String insertCPUInterrupts = "INSERT INTO cpu_interrupts values( "
+                                  + cpu_number.get(index) + " , '"
+                                  + interrupt_type.get(index) + "' , '"
+                                  + interrupt_count.get(index) + "' , '"
+                                  + date_time.get(index) + "');";
+     executeSQL(insertCPUInterrupts);
    }
+ }
 
 
-     public void addCPUTimePerformance(HashMap metrics){
+  public void addCPUTimePerformance(HashMap metrics) {
     ArrayList<String> cpu_number = (ArrayList<String>) metrics.get("cpu_number");
-      ArrayList<String> current_clock_rate = (ArrayList<String>) metrics.get("current_clock_rate");
-      ArrayList<String> current_temp = (ArrayList<String>) metrics.get("current_temp");
-      ArrayList<String> date_time = (ArrayList<String>) metrics.get("date_time");
+    ArrayList<String> current_clock_rate = (ArrayList<String>) metrics.get("current_clock_rate");
+    ArrayList<String> current_temp = (ArrayList<String>) metrics.get("current_temp");
+    ArrayList<String> date_time = (ArrayList<String>) metrics.get("date_time");
 
-      for(int index = 0; index < cpu_number.size(); index++){
+    for(int index = 0; index < cpu_number.size(); index++) {
       String insertCPUPerformance = "INSERT INTO cpu_time_performance values( " +
                               cpu_number.get(index) +" , "+ 
                               current_clock_rate.get(index) + " , "+
@@ -172,70 +183,76 @@ public class DBInterface {
    }
 
 
-    public void addNetworkData(HashMap metrics){
-       ArrayList<String> local_ip = (ArrayList<String>) metrics.get("local_ip");
-   ArrayList<String> foreign_ip = (ArrayList<String>) metrics.get("foreign_ip");
-   ArrayList<String> pid = (ArrayList<String>) metrics.get("pid");
-   ArrayList<String> program_name = (ArrayList<String>) metrics.get("program_name");
-   ArrayList<String> date_time = (ArrayList<String>) metrics.get("date_time");
+  public void addNetworkData(HashMap metrics) {
+    ArrayList<String> local_ip = (ArrayList<String>) metrics.get("local_ip");
+    ArrayList<String> foreign_ip = (ArrayList<String>) metrics.get("foreign_ip");
+    ArrayList<String> pid = (ArrayList<String>) metrics.get("pid");
+    ArrayList<String> program_name = (ArrayList<String>) metrics.get("program_name");
+    ArrayList<String> date_time = (ArrayList<String>) metrics.get("date_time");
 
-     for(int index = 0; index < pid.size(); index++){
-    String insertNetworking = "INSERT INTO networking_stats values( " +
-                              pid.get(index) + " , '" + 
-                              local_ip.get(index) +"' , '"+ 
-                              foreign_ip.get(index) + "' , '"+
-                              program_name.get(index) + "' , '"+
-                              date_time.get(index) + "');";
-     executeSQL(insertNetworking);
-      }
-   }
+    for(int index = 0; index < pid.size(); index++) {
+      String insertNetworking = "INSERT INTO networking_stats values( " 
+                                + pid.get(index) + " , '" 
+                                + local_ip.get(index) + "' , '"
+                                + foreign_ip.get(index) + "' , '"
+                                + program_name.get(index) + "' , '"
+                                + date_time.get(index) + "');";
+      executeSQL(insertNetworking);
+    }
+ }
 
-  public void addVolatileStats(HashMap metrics){
+  public void addVolatileStats(HashMap metrics) {
     ArrayList<String> total_memory = (ArrayList<String>) metrics.get("total_memory");
     ArrayList<String> available_memory = (ArrayList<String>) metrics.get("available_memory");
     ArrayList<String> total_swap = (ArrayList<String>) metrics.get("total_swap");
     ArrayList<String> swap_available = (ArrayList<String>) metrics.get("swap_available");
     ArrayList<String> date_time = (ArrayList<String>) metrics.get("date_time");
+    
     for(int index = 0; index < total_memory.size(); index++){
-    String insertVolatile = "INSERT INTO volatile_mem_stats values( "+
-                              total_memory.get(index) + " , " +
-                              available_memory.get(index) +" , "+
-                              total_swap.get(index) + " , "+
-                              swap_available.get(index) + " , '"+
-                              date_time.get(index) + "');";
-    executeSQL(insertVolatile);
+      String insertVolatile = "INSERT INTO volatile_mem_stats values( "
+                              + total_memory.get(index) + " , " 
+                              + available_memory.get(index) + " , "
+                              + total_swap.get(index) + " , "
+                              + swap_available.get(index) + " , '"
+                              + date_time.get(index) + "');";
+      executeSQL(insertVolatile);
     }
   }
 
- public void addPersistentStorage(HashMap metrics){
+  public void addPersistentStorage(HashMap metrics) {
     ArrayList<String> disk_name = (ArrayList<String>) metrics.get("disk_name");
     ArrayList<String> used = (ArrayList<String>) metrics.get("used");
     ArrayList<String> available = (ArrayList<String>) metrics.get("available");
-    for(int index = 0; index < disk_name.size(); index++){
-        String insertPersistent = "INSERT INTO persistent_storage values( '"+ 
-                                   disk_name.get(index)  + "' , " +
-                                   (Float.parseFloat(used.get(index)) + Float.parseFloat(available.get(index))) + ");";
-    executeSQL(insertPersistent);
+    
+    for(int index = 0; index < disk_name.size(); index++) {
+      String insertPersistent = "INSERT INTO persistent_storage values( '"
+                                + disk_name.get(index)  + "' , " 
+                                + (Float.parseFloat(used.get(index)) + Float.parseFloat(available.get(index))) + ");";
+      executeSQL(insertPersistent);
     }
+  }
 
- }
-
-  public void addPersistentStorageStats(HashMap metrics){
+  public void addPersistentStorageStats(HashMap metrics) {
     ArrayList<String> disk_name = (ArrayList<String>) metrics.get("disk_name");
     ArrayList<String> used = (ArrayList<String>) metrics.get("used");
     ArrayList<String> available = (ArrayList<String>) metrics.get("available");
     ArrayList<String> used_percent =(ArrayList<String>) metrics.get("used_percent");
     
     for(int index = 0; index < disk_name.size(); index++){
-        String insertPersistent = "INSERT INTO persistent_storage_stats values( '"+
-                                   disk_name.get(index) + "' , " +
-                                   used.get(index) + " , " +
-                                   available.get(index) + " , '" +
-                                   new Date().toString() +"' , " +
-                                   used_percent.get(index) +  ");";
-    executeSQL(insertPersistent);
+      String insertPersistent = "INSERT INTO persistent_storage_stats values( '"
+                                + disk_name.get(index) + "' , " 
+                                + used.get(index) + " , " 
+                                + available.get(index) + " , '" 
+                                + new Date().toString() + "' , " 
+                                + used_percent.get(index) +  ");";
+      executeSQL(insertPersistent);
     }
   }
 
+  /*
+   * ========================================================================
+   * ADD METRICS METHODS END
+   * ========================================================================
+   */
 }
 

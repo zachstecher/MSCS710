@@ -1,3 +1,13 @@
+/**
+ * Class: RAMMetrics
+ * 
+ * @authors Matthew Sokoloff, Zach Stecher, Rickin Adatia
+ * 
+ * This class contains the methods that read the RAM
+ * metrics from the system and format them into a hash
+ * map to be inserted to the database.
+ */
+
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -21,9 +31,9 @@ public class RAMMetrics {
     lists[3] = swapAvail;
     
     for(String line : data){
-    String result = "";
-    String[] keys = {"MemAvail", "MemTotal", "SwapTotal", "SwapFree"};
-    String[] patterns = {"[0-9]+","[0-9]+.[0-9]", "[0-9]+.[0-9]", "[0-9]+.[0-9]"};
+      String result = "";
+      String[] keys = {"MemAvail", "MemTotal", "SwapTotal", "SwapFree"};
+      String[] patterns = {"[0-9]+","[0-9]+.[0-9]", "[0-9]+.[0-9]", "[0-9]+.[0-9]"};
       for (int i = 0; i < keys.length; i++){
         String result_sub  = Utils.getValue(line, keys[i], patterns[i]);
         if(result_sub != null){
@@ -31,8 +41,9 @@ public class RAMMetrics {
         }
       }
     }
-    dateTimes.add(new Date().toString());
+    dateTimes.add(new Date().toString()); // Timestamp
     
+    // Add each metric to the hash map
     ramMetrics.put("total_memory", totalSize);
     ramMetrics.put("available_memory", spaceAvail);
     ramMetrics.put("total_swap", swapSize);

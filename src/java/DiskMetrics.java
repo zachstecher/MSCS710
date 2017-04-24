@@ -1,3 +1,12 @@
+/**
+ * Class: DiskMetrics
+ * 
+ * @authors Matthew Sokoloff, Zach Stecher, Rickin Adatia
+ * 
+ * This class holds the functionality to read and arrange the
+ * statistics of the computer's disk drive.
+ */
+
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -15,6 +24,8 @@ public class DiskMetrics {
     ArrayList<String> usedPercent = new ArrayList();
     ArrayList<String> dateTimes = new ArrayList();
     String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
+    
+    //Read through the data and pull out the specific information using RegEx
     for (String line: data){
       ArrayList<String> lineResult = Utils.getValues(line, "\\/dev.*?(?= )", " [0-9]+");
       if(lineResult.size()>0) {
@@ -27,6 +38,7 @@ public class DiskMetrics {
     
     }
     
+    // Add all the metrics into the hash map
     diskMetrics.put("disk_name", diskName);
     diskMetrics.put("used", used);
     diskMetrics.put("available", available);

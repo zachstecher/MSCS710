@@ -1,3 +1,13 @@
+/**
+ * Class: Testsuite
+ * 
+ * @authors Matthew Sokoloff, Zach Stecher, Rickin Adatia
+ * 
+ * This class contains our custom test suite for this
+ * program's java code. This class handles Unit Testing
+ * and Integration Testing for this program's Java code.
+ */
+
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,7 +17,9 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class TestSuite {
-public static int errors = 0;
+public static int errors = 0; // Error tracker
+  
+  // Initialize and run all of our test modules
   public static void main(String[] args) throws InterruptedException{
    System.out.println("+++++++ JAVA BACKEND TESTING +++++++++");
     TestSuite test1 = new TestSuite();

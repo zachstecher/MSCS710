@@ -1,3 +1,11 @@
+/**
+ * Class: Utils
+ * @authors Matthew Sokoloff, Zach Stecher, Rickin Adatia
+ * 
+ * This class contains utility methods to be used
+ * by other classes
+ */
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,17 +16,15 @@ import java.util.regex.Pattern;
 
 
 public class Utils {
-public static BufferedReader br = null;
-public static FileReader fr = null;
+  public static BufferedReader br = null;
+  public static FileReader fr = null;
 
 
 /*
  * This method reads a file at the designated path
  * and returns it's contents as an array string.
- * 
- * Parameters: a file path including the name of the file to be read.
  */
-  public static ArrayList<String> readFile(String path){
+  public static ArrayList<String> readFile(String path) {
     ArrayList<String> lines = new ArrayList<>(); 
     try {
       fr = new FileReader(path);
@@ -43,8 +49,12 @@ public static FileReader fr = null;
     return lines;
   } 
 
-
-  public static ArrayList<String> execShell(String command){
+  /*
+   * This method reads responses from a console command
+   * and formats them into an array list so they can
+   * be inserted into the database.
+   */
+  public static ArrayList<String> execShell(String command) {
     ArrayList<String> lines = new ArrayList<>();
     String s = null;
     try {
@@ -68,7 +78,11 @@ public static FileReader fr = null;
     return lines;
   } 
   
-  public static String getValue(String line, String key, String valuePatter){
+  /*
+   * This method modularizes the ability to pull a specific value
+   * from a hash map.
+   */
+  public static String getValue(String line, String key, String valuePatter) {
     if(pExists(line, key)){
       Pattern pValue = Pattern.compile(valuePatter);
       Matcher matcher = pValue.matcher(line);
@@ -82,18 +96,18 @@ public static FileReader fr = null;
     }     
   }
 
-   private static boolean pExists(String line, String key){
-     Pattern pKey = Pattern.compile(key);
+  private static boolean pExists(String line, String key) {
+    Pattern pKey = Pattern.compile(key);
     String result = "";
     Matcher match = pKey.matcher(line);
     while(match.find()){
       result = match.group();
     }
    return (result != "");
-   }
+  }
 
-    public static ArrayList<String>  getValues(String line, String key, String valuePatter){
-    if(pExists(line, key)){
+  public static ArrayList<String>  getValues(String line, String key, String valuePatter) {
+    if(pExists(line, key)) {
       Pattern pValue = Pattern.compile(valuePatter);
       Matcher matcher = pValue.matcher(line);
       ArrayList<String> value = new ArrayList();
@@ -104,4 +118,5 @@ public static FileReader fr = null;
     } else {
       return new ArrayList<>();
     }
-  }}
+  }
+}

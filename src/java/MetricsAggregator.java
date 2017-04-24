@@ -1,16 +1,24 @@
+/**
+ * Class: MetricsAggregator
+ * 
+ * @authors Matthew Sokoloff, Zach Stecher, Rickin Adatia
+ * 
+ * This class handles aggregating all the different metrics
+ * reading classes and methods and then adds them to the
+ * database using the methods in DBInterface.
+ */
 
+public class MetricsAggregator {
+  private NetworkMetrics net;
+  private CPUMetrics cpu;
+  private DBInterface db;
+  private RAMMetrics ram;
+  private DiskMetrics disk;
 
-public class MetricsAggregator{
- private NetworkMetrics net;
- private CPUMetrics cpu;
- private DBInterface db;
- private RAMMetrics ram;
- private DiskMetrics disk;
-
- int recordFrequency;
+  int recordFrequency;
  
  
- public MetricsAggregator(int recordFrequency){
+  public MetricsAggregator(int recordFrequency) {
     this.net = new NetworkMetrics();
     this.cpu = new CPUMetrics();
     this.db = new DBInterface();
@@ -20,27 +28,27 @@ public class MetricsAggregator{
     this.recordFrequency = recordFrequency;
     //One time entries:
     this.db.addStaticCPUMetrics(this.cpu.getStaticCPUMetrics());
-     this.db.addPersistentStorage(this.disk.getDiskMetrics());
- }
+    this.db.addPersistentStorage(this.disk.getDiskMetrics());
+  }
   
-public void repeatingEntries() throws InterruptedException {
-   //For testing. Will eventually just run infinitely
-//   while(true){
-     int count = 0;
-     while(count < 10000){
-     //cpu metrics
-     this.db.addCPUInterrupts(this.cpu.getCPUInterrupts());
-     this.db.addCPUTimePerformance( this.cpu.getCPUTimePerformance());
-     //network metrics
-     this.db.addNetworkData(this.net.getNetworkMetrics());
-     //ram metrics
-     this.db.addVolatileStats(this.ram.getRAMMetrics());
-     //disk metrics
-     this.db.addPersistentStorageStats(this.disk.getDiskMetrics());
-     //wait...
-     Thread.sleep(this.recordFrequency);
-     count++;
-   }
+  public void repeatingEntries() throws InterruptedException {
+   // For testing. Will eventually just run infinitely
+   // while(true){
+    int count = 0;
+    
+    while(count < 10000){
+    //cpu metrics
+    this.db.addCPUInterrupts(this.cpu.getCPUInterrupts());
+    this.db.addCPUTimePerformance( this.cpu.getCPUTimePerformance());
+    //network metrics
+    this.db.addNetworkData(this.net.getNetworkMetrics());
+    //ram metrics
+    this.db.addVolatileStats(this.ram.getRAMMetrics());
+    //disk metrics
+    this.db.addPersistentStorageStats(this.disk.getDiskMetrics());
+    //wait...
+    Thread.sleep(this.recordFrequency);
+    count++;
+    }
   }
 }
-
