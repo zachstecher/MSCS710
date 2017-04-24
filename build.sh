@@ -3,7 +3,7 @@ arg=$1
 serverDir=/var/www/html/
 
 # --- Web application component --- #
-if [ $arg == "configure" ]
+if [[ $arg == "configure" ]]
  then
 	#Create the server
 	sudo apt-get install apache2
@@ -22,7 +22,7 @@ if [ $arg == "configure" ]
 fi;
 
 # --- Comile the code --- #
-if [ $arg == "compile" ]
+if [[ $arg == "compile" ]]
 then
 	printf "\n Compiling.....\n***************************"
 	rm ${serverDir}*.db
@@ -37,7 +37,7 @@ fi
 
 
 # --- Run the java program and launch the web server --- #
-if [ $arg == "run" ]
+if [[ $arg == "run" ]]
 then
 	#Run the java program
 	printf "\n Running Java Program.....\n*************************\n"
