@@ -11,20 +11,22 @@
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+import java.util.Map;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.Date;
 
 public class RAMMetrics {
   
   public HashMap getRAMMetrics() {
-    HashMap<String, ArrayList> ramMetrics = new HashMap<String, ArrayList>();
-    ArrayList<String> data = Utils.readFile("/proc/meminfo");
-    ArrayList<String> totalSize = new ArrayList<>();
-    ArrayList<String> spaceAvail = new ArrayList<>();
-    ArrayList<String> swapSize = new ArrayList<>();
-    ArrayList<String> swapAvail = new ArrayList<>();
-    ArrayList<String> dateTimes = new ArrayList();
-    ArrayList<String>[] lists = new ArrayList[4];
+    Map<String, ArrayList> ramMetrics = new HashMap<>();
+    List<String> data = Utils.readFile("/proc/meminfo");
+    List<String> totalSize = new ArrayList<>();
+    List<String> spaceAvail = new ArrayList<>();
+    List<String> swapSize = new ArrayList<>();
+    List<String> swapAvail = new ArrayList<>();
+    List<String> dateTimes = new ArrayList();
+    List<String>[] lists = new ArrayList[4];
     lists[0] = totalSize;
     lists[1] = spaceAvail;
     lists[2] = swapSize;

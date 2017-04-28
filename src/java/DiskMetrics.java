@@ -10,24 +10,27 @@
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Date;
 
-public class DiskMetrics {
-  public HashMap<String, ArrayList> getDiskMetrics(){
-    ArrayList<String> data = Utils.execShell("df");
-    HashMap diskMetrics = new HashMap();
-    ArrayList<String> diskName = new ArrayList();
-    ArrayList<String> used = new ArrayList();
-    ArrayList<String> available = new ArrayList();
-    ArrayList<String> usedPercent = new ArrayList();
-    ArrayList<String> dateTimes = new ArrayList();
+public static class DiskMetrics {
+
+  publici static Map<String, ArrayList> getDiskMetrics(){
+    List<String> data = Utils.execShell("df");
+    Map diskMetrics = new HashMap();
+    List<String> diskName = new ArrayList();
+    List<String> used = new ArrayList();
+    List<String> available = new ArrayList();
+    List<String> usedPercent = new ArrayList();
+    List<String> dateTimes = new ArrayList();
     String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
     
     //Read through the data and pull out the specific information using RegEx
     for (String line: data){
-      ArrayList<String> lineResult = Utils.getValues(line, "\\/dev.*?(?= )", " [0-9]+");
+      List<String> lineResult = Utils.getValues(line, "\\/dev.*?(?= )", " [0-9]+");
       if(lineResult.size()>0) {
         diskName.add(line.split(" ")[0]);
         used.add(lineResult.get(1).replace(" ", ""));

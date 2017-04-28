@@ -7,7 +7,8 @@
  * metrics from the system and format them into a hash
  * map to be inserted to the database.
  */
-
+import java.util.Map;
+import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -15,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.Date;
 
 
-public class CPUMetrics{
+public static class CPUMetrics{
 
 
   /*
@@ -23,14 +24,14 @@ public class CPUMetrics{
    * This will only be collected once the first time the application
    * is run as these numbers should never change.
    */
-  public HashMap getStaticCPUMetrics(){
-    HashMap<String, ArrayList> metrics = new HashMap<String, ArrayList>();
-    ArrayList<String> data = Utils.readFile("/proc/cpuinfo");
-    ArrayList<String> cpuNumber = new ArrayList<>();
-    ArrayList<String> maxClockRate = new ArrayList<>();
-    ArrayList<String> maxTemp = new ArrayList<>();
-    ArrayList<String> tempInfo = Utils.execShell("sensors");
-    ArrayList<String>[] lists = new ArrayList[2];
+  public static Map getStaticCPUMetrics(){
+    Map<String, ArrayList> metrics = new HashMap<String, ArrayList>();
+    List<String> data = Utils.readFile("/proc/cpuinfo");
+    List<String> cpuNumber = new ArrayList<>();
+    List<String> maxClockRate = new ArrayList<>();
+    List<String> maxTemp = new ArrayList<>();
+    List<String> tempInfo = Utils.execShell("sensors");
+    List<String>[] lists = new ArrayList[2];
     lists[0] = cpuNumber;
     lists[1] = maxClockRate;
 
@@ -70,19 +71,19 @@ public class CPUMetrics{
     }
 
 
-  public HashMap getCPUInterrupts(){
-    HashMap<String, ArrayList> metrics = new HashMap<String, ArrayList>();
+  public static Map getCPUInterrupts(){
+    Map<String, ArrayList> metrics = new HashMap<String, ArrayList>();
     /*Metrics for:
      * Function call interrupts; key: CAL:
      * Rescheduling Interrupts;  key: RES:
      */
 
-
-    ArrayList<String> data = Utils.readFile("/proc/interrupts");
-    ArrayList<String> cpuNumber = new ArrayList<>();
-    ArrayList<String> interruptType = new ArrayList();
-    ArrayList<String> interruptCount = new ArrayList();
-    ArrayList<String> timestamp = new ArrayList();
+    String interruptsPath = "/proc/interrupts";
+    List<String> data = Utils.readFile(interruptsPath);
+    List<String> cpuNumber = new ArrayList<>();
+    List<String> interruptType = new ArrayList();
+    List<String> interruptCount = new ArrayList();
+    List<String> timestamp = new ArrayList();
     for(String line: data){
       ArrayList<String> resInterrupts_sub = Utils.getValues(line, "RES:", "[0-9]+");
       for(int index = 0; index < resInterrupts_sub.size(); index++){

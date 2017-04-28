@@ -8,20 +8,23 @@
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Date;
 
-public class NetworkMetrics{
+public static class NetworkMetrics{
 
-  public HashMap getNetworkMetrics(){
-   ArrayList<String> data = Utils.execShell("sudo netstat -nlp");
-   HashMap<String, ArrayList> metrics = new HashMap<String, ArrayList>();
-   ArrayList<String> localIP = new ArrayList();
-   ArrayList<String> foreignIP = new ArrayList();
-   ArrayList<String> pid = new ArrayList();
-   ArrayList<String> programName = new ArrayList();
-   ArrayList<String> dateTimes = new ArrayList();
+  public static Map getNetworkMetrics(){
+   String networkInfoCall = "sudo netstat -nlp";
+   List<String> data = Utils.execShell(networkInfoCall);
+   Map<String, ArrayList> metrics = new HashMap<>();
+   List<String> localIP = new ArrayList();
+   List<String> foreignIP = new ArrayList();
+   List<String> pid = new ArrayList();
+   List<String> programName = new ArrayList();
+   List<String> dateTimes = new ArrayList();
    String r1 = "[0-9:]+\\.[0-9:]+\\.[0-9:]+\\.[0-9:]+:[0-9*]+";
    String r2 = "[:]+[0-9:]+[0-9:]+[0-9:*]+";
    

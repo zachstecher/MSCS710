@@ -9,26 +9,14 @@
  */
 
 public class MetricsAggregator {
-  private NetworkMetrics net;
-  private CPUMetrics cpu;
-  private DBInterface db;
-  private RAMMetrics ram;
-  private DiskMetrics disk;
-
-  int recordFrequency;
+  private int recordFrequency;
  
  
   public MetricsAggregator(int recordFrequency) {
-    this.net = new NetworkMetrics();
-    this.cpu = new CPUMetrics();
-    this.db = new DBInterface();
-    this.ram = new RAMMetrics();
-    this.disk = new DiskMetrics();
-    
     this.recordFrequency = recordFrequency;
     //One time entries:
-    this.db.addStaticCPUMetrics(this.cpu.getStaticCPUMetrics());
-    this.db.addPersistentStorage(this.disk.getDiskMetrics());
+    this.db.addStaticCPUMetrics(CPUMetrics.getStaticCPUMetrics());
+    this.db.addPersistentStorage(DiskMetrics.getDiskMetrics());
   }
   
   public void repeatingEntries() throws InterruptedException {
@@ -38,14 +26,14 @@ public class MetricsAggregator {
     
     while(count < 10000){
     //cpu metrics
-    this.db.addCPUInterrupts(this.cpu.getCPUInterrupts());
-    this.db.addCPUTimePerformance( this.cpu.getCPUTimePerformance());
+    this.db.addCPUInterrupts(CPUMetrics.getCPUInterrupts());
+    this.db.addCPUTimePerformance( CPUMetrics.getCPUTimePerformance());
     //network metrics
-    this.db.addNetworkData(this.net.getNetworkMetrics());
+    this.db.addNetworkData(NetworkMetrics.getNetworkMetrics());
     //ram metrics
-    this.db.addVolatileStats(this.ram.getRAMMetrics());
+    this.db.addVolatileStats(RAMMetrics.getRAMMetrics());
     //disk metrics
-    this.db.addPersistentStorageStats(this.disk.getDiskMetrics());
+    this.db.addPersistentStorageStats(DiskMetrics.getDiskMetrics());
     //wait...
     Thread.sleep(this.recordFrequency);
     count++;
