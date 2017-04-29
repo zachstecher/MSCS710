@@ -14,9 +14,10 @@ import java.util.Map;
 
 public class DBInterface {
  private String db;
-
+ private int autoIncrementNumber;
   public DBInterface(){
     this.db= "jdbc:sqlite:/var/www/html/linux_metrics.db";
+    this.autoIncrementNumber = 0;
   }
   
   /*
@@ -45,6 +46,7 @@ public class DBInterface {
      * All of the SQLite Create Table statements
      */
     String createVolatile = "CREATE TABLE IF NOT EXISTS volatile_mem_stats (\n"
+        + "insert_num INTEGER, \n "
         + "mem_total integer NOT NULL, \n"
         + "mem_available integer NOT NULL, \n"
         + "swap_size integer NOT NULL, \n"
@@ -58,6 +60,7 @@ public class DBInterface {
         + ");";
     
     String createPersistentStats = "CREATE TABLE IF NOT EXISTS persistent_storage_stats (\n"
+        + "insert_num INTEGER, \n "
         + "disk_name text, \n"
         + "used integer NOT NULL, \n"
         + "available integer NOT NULL, \n"
@@ -66,6 +69,7 @@ public class DBInterface {
         + ");";
     
     String createNetworking = "CREATE TABLE IF NOT EXISTS networking_stats (\n"
+        + "insert_num INTEGER, \n "
         + "pid integer NOT NULL, \n"
         + "local_ip text NOT NULL, \n"
         + "foreign_ip text NOT NULL, \n"
@@ -80,6 +84,7 @@ public class DBInterface {
         + ");";
     
     String createCPUInterrupts = "CREATE TABLE IF NOT EXISTS cpu_interrupts (\n"
+        + "insert_num INTEGER, \n "
         + "cpu_number integer NOT NULL, \n"
         + "interrupt_type text NOT NULL, \n"
         + "interrupt_count text NOT NULL, \n"
@@ -87,6 +92,7 @@ public class DBInterface {
         + ");";
     
     String createCPUTimePerformance = "CREATE TABLE IF NOT EXISTS cpu_time_performance (\n"
+        + "insert_num INTEGER, \n "
         + "cpu_number integer, \n"
         + "cpu_temp float NOT NULL, \n"
         + "clock_speed float NOT NULL, \n"
@@ -132,6 +138,10 @@ public class DBInterface {
    * ADD METRICS METHODS START
    * ========================================================================
    */
+
+  public void increment(){
+    this.autoIncrementNumber++;
+  } 
   
   public void addStaticCPUMetrics(Map metrics) {
     String db = "jdbc:sqlite:linux_metrics.db";
@@ -157,6 +167,7 @@ public class DBInterface {
   
    for(int index = 0; index < cpu_number.size(); index++) {
      String insertCPUInterrupts = "INSERT INTO cpu_interrupts values( "
+                                  + this.autoIncrementNumber + ", "
                                   + cpu_number.get(index) + " , '"
                                   + interrupt_type.get(index) + "' , '"
                                   + interrupt_count.get(index) + "' , '"
@@ -174,7 +185,8 @@ public class DBInterface {
 
     for(int index = 0; index < cpu_number.size(); index++) {
       String insertCPUPerformance = "INSERT INTO cpu_time_performance values( " +
-                              cpu_number.get(index) +" , "+ 
+                               this.autoIncrementNumber + ", " +
+                               cpu_number.get(index) +" , "+ 
                               current_clock_rate.get(index) + " , "+
                               current_temp.get(index) + " , '"+
                               date_time.get(index) + "');";
@@ -194,6 +206,7 @@ public class DBInterface {
 
     for(int index = 0; index < pid.size(); index++) {
       String insertNetworking = "INSERT INTO networking_stats values( " 
+                                + this.autoIncrementNumber + ", "
                                 + pid.get(index) + " , '" 
                                 + local_ip.get(index) + "' , '"
                                 + foreign_ip.get(index) + "' , '"
@@ -212,6 +225,7 @@ public class DBInterface {
     
     for(int index = 0; index < total_memory.size(); index++){
       String insertVolatile = "INSERT INTO volatile_mem_stats values( "
+                              + this.autoIncrementNumber + ", "
                               + total_memory.get(index) + " , " 
                               + available_memory.get(index) + " , "
                               + total_swap.get(index) + " , "
@@ -241,8 +255,9 @@ public class DBInterface {
     List<String> used_percent =(List<String>) metrics.get("used_percent");
     
     for(int index = 0; index < disk_name.size(); index++){
-      String insertPersistent = "INSERT INTO persistent_storage_stats values( '"
-                                + disk_name.get(index) + "' , " 
+      String insertPersistent = "INSERT INTO persistent_storage_stats values( "
+                                + this.autoIncrementNumber + ", "
+                                + "'" +disk_name.get(index) + "' , " 
                                 + used.get(index) + " , " 
                                 + available.get(index) + " , '" 
                                 + new Date().toString() + "' , " 

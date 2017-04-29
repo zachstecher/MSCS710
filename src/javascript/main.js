@@ -1,6 +1,6 @@
 //Globals used for data/title selection
-ramIndex = 1;
-cpuIndex = 1;
+ramIndex = 2;
+cpuIndex = 2;
 cpuTitle = "Clock Rate";
 ramTitle = "Memory Available";
 
@@ -29,6 +29,7 @@ document.getElementById("ram_options").onchange = function() {
 
 //Renders RAM metrics to the screen
 displayRamMetrics = function(){
+ var DATECOL = 5
  $.ajax({
    type: 'get',
    url: 'getData.php',
@@ -37,11 +38,11 @@ displayRamMetrics = function(){
        var allData = CSVToArray(data, "," );
        jQuery('.tables').html('');
        $("h3").text("Ram Metric: " + ramTitle);
-       headers = ['total memory', 'memory available', 'swap size', 'swap available', 'date & time'];
+       headers = ['index', 'total memory', 'memory available', 'swap size', 'swap available', 'date & time'];
        allData.splice(-4);
        $(".tables").append(arrayToTable(allData, headers));
        new Chartist.Line('.ct-chart', {
-  labels: getCol(allData, 4),
+  labels: getCol(allData, DATECOL),
     series: [
      getCol(allData,ramIndex)
      ]
@@ -81,6 +82,8 @@ function arrayToTable(tableData, headers) {
 
 //Creates a chart containing the number of network connections
 displayNetworkMetrics = function(){
+ var DATECOL = 2;
+ var DATACOL = 1;
  $.ajax({
    type: 'get',
    url: 'numNetworkConns.php',
@@ -90,13 +93,13 @@ displayNetworkMetrics = function(){
        console.log(allData);
        jQuery('.tables').html('');
         $("h3").text("Number of connections");
-       headers = ['number of connections', 'date & time'];
+       headers = ['index','number of connections', 'date & time'];
        allData.splice(-4);
        $(".tables").append(arrayToTable(allData, headers));
        new Chartist.Line('.ct-chart', {
-  labels: getCol(allData, 1),
+  labels: getCol(allData, DATECOL),
     series: [
-     getCol(allData,0)
+     getCol(allData,DATACOL)
      ]
       }, {
         fullWidth: true,
@@ -163,7 +166,7 @@ return displayAllCPUs(id, [], numThreads);
        var allData = CSVToArray(data, "," );
        allData.splice(-4);
        jQuery('.tables').html('');
-       headers = ['cpu number', 'current clock rate (mhz)', 'current temperature (c)','date & time'];
+       headers = ['index','cpu number', 'current clock rate (mhz)', 'current temperature (c)','date & time'];
        $(".tables").append(arrayToTable(allData, headers));
 
     }
@@ -185,7 +188,7 @@ displayCPUChart = function(id, col){
        var allData = CSVToArray(data, "," );
        jQuery('.tables').html('');
        $("h3").text("CPU "+cpuTitle +" (CPU Thread " +id +")");
-       headers = ['cpu number', 'current clock rate (mhz)', 'current temperature (c)','date & time'];
+       headers = ['index','cpu number', 'current clock rate (mhz)', 'current temperature (c)','date & time'];
        allData.splice(-4);
        $(".tables").append(arrayToTable(allData, headers));
        new Chartist.Line('.ct-chart', {
@@ -218,12 +221,12 @@ displayHDChart = function(id, col){
        allData.splice(-4);
        jQuery('.tables').html('');
        $("h3").text("Available Space (Disk Partition " + id.replace("-","/").replace("-","/").substring(3,id.length) + ")");
-       headers = ['partition name','space used', 'space available', 'date & time'];
+       headers = ['index','partition name','space used', 'space available', 'date & time'];
        $(".tables").append(arrayToTable(allData, headers));
        new Chartist.Line('.ct-chart', {
   labels: getCol(allData, col),
     series: [
-     getCol(allData,1)
+     getCol(allData,2)
      ]
       }, {
         fullWidth: true,
@@ -251,7 +254,7 @@ initCPUS = function(){
                .prepend("<img id='cpu_"+i+"' src='cpu.jpg' width='160px' height='128px'/>");
 
              $('#cpu_'+i)
-               .click(function(){ displayCPUChart(this.id.split("_")[1], 3);});
+               .click(function(){ displayCPUChart(this.id.split("_")[1], 4);});
 
             
         }
@@ -277,7 +280,7 @@ initHDS = function(){
                .prepend("<img id='hd_"+lines[i][0]+"' src='hd.png' width='160px' height='128px'/>");
 
              $('#hd_'+lines[i][0])
-               .click(function(){ displayHDChart(this.id, 3);});
+               .click(function(){ displayHDChart(this.id, 4);});
           }
         }
     

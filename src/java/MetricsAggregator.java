@@ -35,7 +35,7 @@ public class MetricsAggregator {
     this.db.addVolatileStats(RAMMetrics.getRAMMetrics());
     //disk metrics
     this.db.addPersistentStorageStats(DiskMetrics.getDiskMetrics());
-    //wait...
+    this.db.increment();
     Thread.sleep(this.recordFrequency);
     count++;
     }
