@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.util.List;
 
 public class Utils {
   public static BufferedReader br = null;
@@ -24,8 +24,8 @@ public class Utils {
  * This method reads a file at the designated path
  * and returns it's contents as an array string.
  */
-  public static ArrayList<String> readFile(String path) {
-    ArrayList<String> lines = new ArrayList<>(); 
+  public static List<String> readFile(String path) {
+    List<String> lines = new ArrayList<>(); 
     try {
       fr = new FileReader(path);
       br = new BufferedReader(fr);
@@ -54,8 +54,8 @@ public class Utils {
    * and formats them into an array list so they can
    * be inserted into the database.
    */
-  public static ArrayList<String> execShell(String command) {
-    ArrayList<String> lines = new ArrayList<>();
+  public static List<String> execShell(String command) {
+    List<String> lines = new ArrayList<>();
     String s = null;
     try {
       Process p = Runtime.getRuntime().exec(command);

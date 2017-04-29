@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 
 public class TestSuite {
 public static int errors = 0; // Error tracker
@@ -32,6 +34,11 @@ public static int errors = 0; // Error tracker
     //test1.MetricsAggregatorTest();
   }
   
+  private static void printHeader(String m){
+  System.out.println("\n*******************************************");
+  System.out.println(m);
+  System.out.println("*******************************************\n");
+  }
   
   /*
    *  These methods each test a getMetrics method individually
@@ -41,13 +48,11 @@ public static int errors = 0; // Error tracker
   
   public static void RAMTest() {
     
-    System.out.println("\n*******************************************");
-    System.out.println("Beginning RAMMetrics Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Beginning RAMMetrics Test.");
     RAMMetrics rmiTest = new RAMMetrics();
     try {
-      HashMap<String, ArrayList> test = rmiTest.getRAMMetrics();
-      for(ArrayList item : test.values()) {
+      Map<String, List> test = rmiTest.getRAMMetrics();
+      for(List item : test.values()) {
         if (item == null | item.isEmpty()) throw new IllegalArgumentException("Entry cannot be null.");
       }
       System.out.println("RAMMetrics Initialization Success.");   
@@ -56,20 +61,16 @@ public static int errors = 0; // Error tracker
       System.out.println(e);
       TestSuite.errors++;
     }
-    System.out.println("\n*******************************************");
-    System.out.println("Ending RAMMetrics Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Ending RAMMetrics Test.");
   }
   
   public static void diskTest() {
   
-    System.out.println("\n*******************************************");
-    System.out.println("Beginning diskMetrics Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Beginning diskMetrics Test.");
     DiskMetrics diskTest = new DiskMetrics();
     try {
-      HashMap<String, ArrayList> test = diskTest.getDiskMetrics();
-      for(ArrayList item : test.values()) {
+      Map<String, List> test = diskTest.getDiskMetrics();
+      for(List item : test.values()) {
         if (item == null | item.isEmpty()) throw new IllegalArgumentException("Entry cannot be null.");
       }
       System.out.println("DiskMetrics Initialization Success.");
@@ -78,19 +79,15 @@ public static int errors = 0; // Error tracker
       System.out.println(e);
       TestSuite.errors++;
     }
-    System.out.println("\n*******************************************");
-    System.out.println("Ending diskMetrics Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Ending diskMetrics Test.");
   }
   
   public static void CPUTest() {
     CPUMetrics cpuStaticTest = new CPUMetrics();
-    System.out.println("\n*******************************************");
-    System.out.println("Beginning CPUMetrics Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Beginning CPUMetrics Test.");
     try {
-      HashMap<String, ArrayList> test = cpuStaticTest.getStaticCPUMetrics();
-      for(ArrayList item : test.values()) {
+      Map<String, List> test = cpuStaticTest.getStaticCPUMetrics();
+      for(List item : test.values()) {
         if (item == null | item.isEmpty()) throw new IllegalArgumentException("Entry cannot be null.");
       }
       System.out.println("StaticCPUMetrics Initialization Success.");
@@ -99,19 +96,15 @@ public static int errors = 0; // Error tracker
       System.out.println(e);
       TestSuite.errors++;
     }
-    System.out.println("\n*******************************************");
-    System.out.println("Ending CPUMetrics Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Ending CPUMetrics Test.");
   }
   
   public static void CPUInterruptsTest() {
     CPUMetrics cpuIntTest = new CPUMetrics();
-    System.out.println("\n*******************************************");
-    System.out.println("Beginning CPUInterrupts Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Beginning CPUInterrupts Test.");
     try {
-      HashMap<String, ArrayList> test = cpuIntTest.getCPUInterrupts();
-      for(ArrayList item : test.values()) {
+      Map<String, List> test = cpuIntTest.getCPUInterrupts();
+      for(List item : test.values()) {
         if (item == null | item.isEmpty()) throw new IllegalArgumentException("Entry cannot be null.");
       }
       System.out.println("CPUInterrupts Initialization Success.");
@@ -120,19 +113,15 @@ public static int errors = 0; // Error tracker
       System.out.println(e);
       TestSuite.errors++;
     }
-    System.out.println("\n*******************************************");
-    System.out.println("Ending CPUInterrupts Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Ending CPUInterrupts Test.");
   }
   
   public static void CPUPerformanceTest() {
-    System.out.println("\n*******************************************");
-    System.out.println("Beginning CPUPerformance Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Beginning CPUPerformance Test.");
     CPUMetrics cpuPerfTest = new CPUMetrics();
     try {
-      HashMap<String, ArrayList> test = cpuPerfTest.getCPUTimePerformance();
-      for(ArrayList item : test.values()) {
+      Map<String, List> test = cpuPerfTest.getCPUTimePerformance();
+      for(List item : test.values()) {
         if (item == null | item.isEmpty()) throw new IllegalArgumentException("Entry cannot be null.");
       }
       System.out.println("CPUTimePerformance Initialization Success.");
@@ -141,19 +130,15 @@ public static int errors = 0; // Error tracker
       System.out.println(e);
       TestSuite.errors++;
     }
-    System.out.println("\n*******************************************");
-    System.out.println("Ending CPUPerformance Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Ending CPUPerformance Test.");
   }
   
   public static void networkTest() {
     NetworkMetrics netTest = new NetworkMetrics();
-    System.out.println("\n*******************************************");
-    System.out.println("Beginning NetworkMetrics Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Beginning NetworkMetrics Test.");
     try {
-      HashMap<String, ArrayList> test = netTest.getNetworkMetrics();
-      for(ArrayList item : test.values()) {
+      Map<String, List> test = netTest.getNetworkMetrics();
+      for(List item : test.values()) {
         if (item == null | item.isEmpty()) throw new IllegalArgumentException("Entry cannot be null.");
       }
       System.out.println("NetworkMetrics Initialization Success.");
@@ -162,9 +147,7 @@ public static int errors = 0; // Error tracker
       System.out.println(e);
       TestSuite.errors++;
     }
-    System.out.println("\n*******************************************");
-    System.out.println("Ending NetworkMetrics Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Ending NetworkMetrics Test.");
   }
   
   
@@ -177,9 +160,7 @@ public static int errors = 0; // Error tracker
    */
    
   public static void DBTest() {
-    System.out.println("\n*******************************************");
-    System.out.println("Beginning DBInterface Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Beginning DBInterface Test.");
     DBInterface dbi = new DBInterface();
     dbi.createNewDatabase();
     
@@ -189,13 +170,13 @@ public static int errors = 0; // Error tracker
     NetworkMetrics netTest = new NetworkMetrics();
     
     
-    HashMap test = rmiTest.getRAMMetrics();
-    HashMap test1 = cpuTest.getStaticCPUMetrics();
-    HashMap test2 = diskTest.getDiskMetrics();
-    HashMap test3 = cpuTest.getCPUInterrupts();
-    HashMap test4 = cpuTest.getCPUTimePerformance();
-    HashMap test5 = netTest.getNetworkMetrics();
-    HashMap test6 = diskTest.getDiskMetrics();
+    Map test = rmiTest.getRAMMetrics();
+    Map test1 = cpuTest.getStaticCPUMetrics();
+    Map test2 = diskTest.getDiskMetrics();
+    Map test3 = cpuTest.getCPUInterrupts();
+    Map test4 = cpuTest.getCPUTimePerformance();
+    Map test5 = netTest.getNetworkMetrics();
+    Map test6 = diskTest.getDiskMetrics();
     
     try {
       dbi.addVolatileStats(test);
@@ -283,9 +264,7 @@ public static int errors = 0; // Error tracker
       TestSuite.errors++;
       
     }
-    System.out.println("\n*******************************************");
-    System.out.println("Ending DBInterface Test.");
-    System.out.println("*******************************************\n");
+    printHeader("Ending DBInterface Test.");
     System.out.println("\nTotal Number of Java Errors : " + TestSuite.errors + "\n");
     System.out.println("End of Java Testing");
   }

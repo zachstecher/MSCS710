@@ -16,9 +16,9 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Date;
 
-public static class DiskMetrics {
+public class DiskMetrics {
 
-  publici static Map<String, ArrayList> getDiskMetrics(){
+  public static Map<String, List> getDiskMetrics(){
     List<String> data = Utils.execShell("df");
     Map diskMetrics = new HashMap();
     List<String> diskName = new ArrayList();

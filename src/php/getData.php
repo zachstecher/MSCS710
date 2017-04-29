@@ -15,9 +15,9 @@ if (isset($_GET["table"])) {
    }
    if (isset($_GET["where"])) {
     // Use underscores for the where
-         $sql = "SELECT * from " .$_GET["table"] . " where " . $_GET["where"];
+         $sql = "SELECT * from " .$_GET["table"] . " where " . $_GET["where"] . " limit 30";
    } else {
-         $sql = "SELECT * from " .$_GET["table"];
+         $sql = "SELECT * from " .$_GET["table"] . " limit 30";
    }
   // Fetch and display records from the table
    $ret = $db->query($sql);

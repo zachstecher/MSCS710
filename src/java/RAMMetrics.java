@@ -18,8 +18,8 @@ import java.util.Date;
 
 public class RAMMetrics {
   
-  public HashMap getRAMMetrics() {
-    Map<String, ArrayList> ramMetrics = new HashMap<>();
+  public static Map getRAMMetrics() {
+    Map<String, List> ramMetrics = new HashMap<>();
     List<String> data = Utils.readFile("/proc/meminfo");
     List<String> totalSize = new ArrayList<>();
     List<String> spaceAvail = new ArrayList<>();

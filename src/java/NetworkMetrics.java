@@ -14,12 +14,12 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Date;
 
-public static class NetworkMetrics{
+public class NetworkMetrics{
 
   public static Map getNetworkMetrics(){
    String networkInfoCall = "sudo netstat -nlp";
    List<String> data = Utils.execShell(networkInfoCall);
-   Map<String, ArrayList> metrics = new HashMap<>();
+   Map<String, List> metrics = new HashMap<>();
    List<String> localIP = new ArrayList();
    List<String> foreignIP = new ArrayList();
    List<String> pid = new ArrayList();
@@ -30,7 +30,7 @@ public static class NetworkMetrics{
    
    // Read through the data and pull the information we're seeking
    for (String line: data){
-     ArrayList<String> lineResult = Utils.getValues(line, "\\b(?:udp|tcp6|tcp|udp6)\\b", "(?:"+r1+"|"+r2+"|[0-9]+/|[^/]+(?=/$|$))");
+     List<String> lineResult = Utils.getValues(line, "\\b(?:udp|tcp6|tcp|udp6)\\b", "(?:"+r1+"|"+r2+"|[0-9]+/|[^/]+(?=/$|$))");
      if(lineResult.size()>0){
        localIP.add(lineResult.get(0));
        foreignIP.add(lineResult.get(1));

@@ -1,35 +1,3 @@
-<!DOCTYPE html>
-<html>
- <head>
-  <title>My website</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-  </head>
-   <body>
-    <div id= "images"></div>
-    <img src= "ram.png" onclick="displayRamMetrics()"></img>
-    <img src ="net.png" width ='96px' height='112px' onclick="displayNetworkMetrics()"></img>
- 
-  <form>
-   <h2>Graph Options:</h2>
-   <label><h4>Ram Options</h4></label>
-     <select id="ram_options" >
-       <option value="Memory Available 1">Memory Available</option>
-       <option value="Swap Available 3">Swap Available</option>
-     </select>
-   <label><h4>CPU Options</h4></label>
-     <select id="cpu_options" >
-       <option value="Clock Rate 1">Clock Rate</option>
-       <option value="Temperature 2">CPU Temperature</option>
-     </select>
-  <form>
-
-   <h3 align = 'center' id ="chart_title">Linux Metrics</h3>
-   <div class = "ct-chart"></div>
-   <div class = "tables"></div>
- <script>
-
 //Globals used for data/title selection
 ramIndex = 1;
 cpuIndex = 1;
@@ -358,6 +326,3 @@ function CSVToArray( strData, strDelimiter ){
         }
         return( arrData );
     }
-  </script> 
- </body>
-</html>

@@ -33,6 +33,10 @@ then
 	javac -classpath ".;src/java/sqlite-jdbc-3.16.1.jar;" @uncompiled.txt
         rm uncompiled.txt
 	printf "\nFinished Compiling!\n***************************\n\n"
+        sudo cp src/javascript/* ${serverDir}
+        sudo cp src/php/* ${serverDir}
+        sudo cp src/images/* ${serverDir}
+        sudo cp src/html/* ${serverDir}
 fi
 
 

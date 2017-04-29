@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.Date;
 
 
-public static class CPUMetrics{
+public class CPUMetrics{
 
 
   /*
@@ -25,7 +25,7 @@ public static class CPUMetrics{
    * is run as these numbers should never change.
    */
   public static Map getStaticCPUMetrics(){
-    Map<String, ArrayList> metrics = new HashMap<String, ArrayList>();
+    Map<String, List> metrics = new HashMap<>();
     List<String> data = Utils.readFile("/proc/cpuinfo");
     List<String> cpuNumber = new ArrayList<>();
     List<String> maxClockRate = new ArrayList<>();
@@ -72,7 +72,7 @@ public static class CPUMetrics{
 
 
   public static Map getCPUInterrupts(){
-    Map<String, ArrayList> metrics = new HashMap<String, ArrayList>();
+    Map<String, List> metrics = new HashMap<>();
     /*Metrics for:
      * Function call interrupts; key: CAL:
      * Rescheduling Interrupts;  key: RES:
@@ -85,7 +85,7 @@ public static class CPUMetrics{
     List<String> interruptCount = new ArrayList();
     List<String> timestamp = new ArrayList();
     for(String line: data){
-      ArrayList<String> resInterrupts_sub = Utils.getValues(line, "RES:", "[0-9]+");
+      List<String> resInterrupts_sub = Utils.getValues(line, "RES:", "[0-9]+");
       for(int index = 0; index < resInterrupts_sub.size(); index++){
         cpuNumber.add(index+"");
         interruptType.add("Rescheduling Interrupt");
@@ -94,7 +94,7 @@ public static class CPUMetrics{
       }
     }
     for(String line: data){
-      ArrayList<String> funcInterrupts_sub = Utils.getValues(line, "CAL:", "[0-9]+");
+      List<String> funcInterrupts_sub = Utils.getValues(line, "CAL:", "[0-9]+");
       for(int index = 0; index < funcInterrupts_sub.size(); index++){
         cpuNumber.add(index+"");
         interruptType.add("Function Call Interrupt");
@@ -118,15 +118,15 @@ public static class CPUMetrics{
    * from each CPU and formats them to be inserted into the
    * database.
    */
-  public HashMap getCPUTimePerformance(){
-    HashMap<String, ArrayList> metrics = new HashMap<String, ArrayList>();
-    ArrayList<String> data = Utils.readFile("/proc/cpuinfo");
-    ArrayList<String> cpuNumber = new ArrayList<>();
-    ArrayList<String> clockRate = new ArrayList<>();
-    ArrayList<String> curTemp = new ArrayList<>();
-    ArrayList<String> dateTimes = new ArrayList<>();
-    ArrayList<String> tempInfo = Utils.execShell("sensors");
-    ArrayList<String>[] lists = new ArrayList[2];
+  public static Map getCPUTimePerformance(){
+    Map<String, List> metrics = new HashMap<>();
+    List<String> data = Utils.readFile("/proc/cpuinfo");
+    List<String> cpuNumber = new ArrayList<>();
+    List<String> clockRate = new ArrayList<>();
+    List<String> curTemp = new ArrayList<>();
+    List<String> dateTimes = new ArrayList<>();
+    List<String> tempInfo = Utils.execShell("sensors");
+    List<String>[] lists = new ArrayList[2];
     lists[0] = cpuNumber;
     lists[1] = clockRate;
     

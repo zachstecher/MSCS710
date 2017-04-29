@@ -10,10 +10,11 @@
 
 public class MetricsAggregator {
   private int recordFrequency;
- 
+  private DBInterface db;
  
   public MetricsAggregator(int recordFrequency) {
     this.recordFrequency = recordFrequency;
+    this.db = new DBInterface();
     //One time entries:
     this.db.addStaticCPUMetrics(CPUMetrics.getStaticCPUMetrics());
     this.db.addPersistentStorage(DiskMetrics.getDiskMetrics());
